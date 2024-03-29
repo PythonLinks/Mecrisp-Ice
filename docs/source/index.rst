@@ -1,5 +1,5 @@
 =====================================
-Mecrisp Ice Unofficial documentation!
+Mecrisp Ice Unofficial Documentation!
 =====================================
 
 **Mecrisp Ice** is a family of 16, 32 and 64 bit soft core forth

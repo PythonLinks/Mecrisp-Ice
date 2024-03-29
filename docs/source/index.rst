@@ -2,7 +2,7 @@
 Mecrisp Ice Unofficial documentation!
 =====================================
 
-Welcome to **Mecrisp Ice**. This is a family of 16, 32 and 64 bit soft core forth
+**Mecrisp Ice** is a family of 16, 32 and 64 bit soft core forth
 processors written in Verilog and based on the J1 stack machine. Mecrisp Ice supports the following
 boards.
 

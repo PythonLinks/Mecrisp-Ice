@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'Mecrisp Ice Unofficial Documentation'
+copyright = '2024, Christopher Lozinski'
+author = 'Chrisopher Lozinski'
 
 release = '0.1'
 version = '0.1.0'

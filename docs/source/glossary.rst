@@ -2,7 +2,7 @@
 GLOSSARY
 ========
 
-This is the list of Forth words supported by Mecrisp-Ice.
+This is the list of Forth words supported by Mecrisp Ice.
 **View it with fixed-width font !**
 This provides short descriptions of all currently included words:
 To figure out exaclty what each word does, you have to read the code.
@@ -28,6 +28,7 @@ Here are the abbreviations used on this page.
    false 0000_0000_0000_0000
    | or as in u|n
 
+And now we have the word definitions. 
 
 Terminal-IO
 -----------
@@ -39,8 +40,8 @@ Terminal-IO
         key             ( -- Char ) Waits for and fetches the pressed key
         emit            ( Char -- ) Emits a character.
         alu.            ( Opcode -- ) ( If this opcode is from an one-opcode
- 	                  definition, it gets named. This way inlined
-			  ALUs get a proper description. )
+ 	                     definition, it gets named. This way inlined
+		    	            ALUs get a proper description. )
 			  
  
 Stack Jugglers
@@ -85,7 +86,8 @@ Double-Jugglers:        They perform the same for double numbers.
 Logic
 -----
 
-::                             
+::     
+
         arshift         ( x1 u -- x2 ) Arithmetric right-shift of u bit-places
         rshift          ( x1 u -- x2 ) Logical right-shift of u bit-places
         lshift          ( x1 u -- x2 ) Logical  left-shift of u bit-places
@@ -101,7 +103,8 @@ Logic
 Arithmetic for single numbers
 -----------------------------
 
-::                             
+::        
+
         /mod            ( n1 n2 -- n3 n4 ) n1 / n2 = n4 rem n3
         mod             ( n1 n2 -- n3 ) n1 / n2 = remainder n3
         /               ( n1 n2 -- n3 ) n1 / n2 = n3
@@ -125,6 +128,8 @@ Arithmetic for single numbers
 
 Arithmetic involving double numbers
 -----------------------------------
+
+::
 
         um*             ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication
 
@@ -175,7 +180,8 @@ Comparisons  Checks if the TOS is ___ than the NOS
 Extension for double and s15.16 fixpoint numbers
 ------------------------------------------------
 
-::                             
+::     
+
         2constant name  ( ud|d -- ) Makes a double constant.
         2variable name  ( ud|d -- ) Makes an initialized double variable
 
@@ -216,7 +222,8 @@ Extension for double and s15.16 fixpoint numbers
 Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
 like signed double numbers.
 
-::                             
+::      
+
         s>f             ( n -- df ) Single integer to s15.16 fixpoint
 
         f/              ( df1 df2 -- df3 ) Division of two fixpoint numbers
@@ -234,7 +241,8 @@ like signed double numbers.
 
 For internal usage:
 
-::                             
+::      
+
         (ud/mod)        ( -- ) Common part of ud/mod and f/
         divisor         ( -- a-addr ) Double variable
         shift           ( -- a-addr ) Double variable
@@ -244,7 +252,8 @@ For internal usage:
 Tools for number input and output 
 ---------------------------------
 
-::                             
+::      
+
         number          ( c-addr len -- 0 )
                                      -- n 1 )
                                      -- n-low n-high 2 )
@@ -257,6 +266,7 @@ Number base
 ----------- 
 
 ::
+
         binary          ( -- ) Sets base to 2
         decimal         ( -- ) Sets base to 10
         hex             ( -- ) Sets base to 16
@@ -304,6 +314,7 @@ String routines:
 ---------------
 
 ::
+
         type            ( c-addr length -- )
                         Prints a string.
 
@@ -331,6 +342,7 @@ String routines:
 Counted string routines:
 
 ::
+
         count           ( cstr-addr -- c-addr length )
                         Convert counted string into addr-length string
 
@@ -385,6 +397,7 @@ User input and its interpretation
 ________________________________
 
 ::
+
         tib             ( -- c-addr ) Input buffer
         pad             ( -- c-addr ) Location to hold temporary data
 
@@ -409,6 +422,7 @@ Dictionary expansion
 -------------------- 
 
 ::
+
         align           ( -- ) Aligns dictionary pointer
         aligned         ( c-addr -- a-addr ) Advances to next aligned address
         cell+           ( x -- x+2 ) Add size of one cell
@@ -431,6 +445,7 @@ Dictionary expansion  (more internal)
 -------------------------------------
 
 ::
+
         s,              ( c-addr len -- ) Inserts a string with a maximum
                                           of 255 characters without runtime
         sliteral        ( c-addr len -- ) Insert a string with runtime
@@ -460,6 +475,7 @@ Compiler essentials
 -------------------
 
 ::
+
         execute         ( a-addr -- ) Calls subroutine
         recurse         ( -- ) Lets the current definition call itself
         ' name          ( -- a-addr ) Tries to find name in dictionary
@@ -487,6 +503,7 @@ Decisions:
 
                          
 ::
+
     flag if ... then
     flag if ... else ... then
 
@@ -510,7 +527,8 @@ Decisions:
 Indefinite Loops
 ----------------                         
 
-::                         
+::           
+
     begin ... again
     begin ... flag until
     begin ... flag while ... repeat
@@ -575,7 +593,8 @@ Definite Loops
 SPI and low-level flash memory access
 ------------------------------------- 
 
-::                         
+::      
+
         spix            ( c1 -- c2 ) Exchange one byte on SPI
         >spi            ( c -- ) Send one byte to SPI
         spi>            ( -- c ) Receive one byte from SPI
@@ -589,7 +608,8 @@ Memory images
 
 Sectors from 1 to 63. Sector 1 is automatically loaded after Reset.
 
-::                         
+::       
+
         load            ( sector# -- ) Loads an image
         save            ( sector# -- ) Saves an image
         erase           ( sector# -- ) Erase an image
@@ -602,7 +622,8 @@ Sectors from 1 to 63. Sector 1 is automatically loaded after Reset.
 Misc hardware
 -------------
 
-::                         
+::       
+
         ms              ( u -- ) Wait u milliseconds
 
         ticks           ( -- u ) Read current ticks
@@ -620,7 +641,8 @@ Misc hardware
 Insight tools that are gone after NEW in targets with 8 kb only
 --------------------------------------------------------------- 
 
-::                         
+::       
+
         .s              ( many -- many ) Prints stack contents
 
         dump            ( addr len -- ) Dump memory contents

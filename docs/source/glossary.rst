@@ -346,9 +346,11 @@ Counted string routines:
         count           ( cstr-addr -- c-addr length )
                         Convert counted string into addr-length string
 
-`Pictured numerical output<https://gforth.org/manual/Formatted-numeric-output.html
->`_:
+Pictured numerical output
 --------------------------
+
+Read about `pictured numerical output <https://gforth.org/manual/Formatted-numeric-output.html>`_
+
 
 ::
 	

@@ -3,7 +3,7 @@
 # -- Project information
 
 project = 'Mecrisp Ice'
-copyright = '2024, Christopher Lozinski'
+copyright = '2024, Christopher Lozinski and Matthias Koch'
 author = 'Chrisopher Lozinski'
 
 release = '0.1'

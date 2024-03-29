@@ -42,8 +42,6 @@ This repository includes:
 If you have any questions, please post them on `our discussion board
 <https://sourceforge.net/p/mecrisp/discussion/general/>`_
 
-The page with word definitions will soon be listed here. 
-
 .. note::
 
 Mecrisp Ice, and its documentation are under active development.   The 16 bit dual port version and the 16 port quickstore version are both flying in space.  Lots more people are using  them here on earth. 

@@ -308,9 +308,9 @@ IO memory area
 
 
 Strings and beautiful output
-===========================
+----------------------------
 
-String routines:
+String routines
 ---------------
 
 ::

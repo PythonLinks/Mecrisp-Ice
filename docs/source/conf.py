@@ -2,7 +2,7 @@
 
 # -- Project information
 
-project = 'Mecrisp Ice Unofficial Documentation'
+project = 'Mecrisp Ice'
 copyright = '2024, Christopher Lozinski'
 author = 'Chrisopher Lozinski'
 

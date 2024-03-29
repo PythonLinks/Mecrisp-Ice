@@ -45,7 +45,7 @@ Terminal-IO
 			  
  
 Stack Jugglers
-==============
+--------------
                              
 Single-Jugglers
 ---------------                             

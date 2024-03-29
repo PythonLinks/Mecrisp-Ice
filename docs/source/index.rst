@@ -6,16 +6,15 @@ Welcome to **Mecrisp Ice**. This is a family of 16, 32 and 64 bit soft core fort
 processors written in Verilog and based on the J1 stack machine. Mecrisp Ice supports the following
 boards.
 
-=====  =====  =======
-  
-=====        =====       =======
-blackice2    hx8k-32bit  tinyfpga-bx
-fomu         icebreaker  ulx3s
-fomu-ledcomm mch2022     ulx3s-usb-experimental
-hx1k         mystorm     hx8k 
-nandland
-=====        =====        =======
 
+.. csv-table:: Supported Boards 
+
+    "blackice2",    "hx8k-32bit",  "tinyfpga-bx"
+    "fomu",         "icebreaker",  "ulx3s"
+    "fomu-ledcomm", "mch2022",     "ulx3s-usb-experimental"
+    "hx1k",         "mystorm",     "hx8k" 
+    "nandland"
+ 
 
 
 This repository includes:

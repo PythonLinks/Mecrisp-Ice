@@ -1,8 +1,8 @@
 I/O
 ===
 
-Mecrisp Ice supports both an I/O read :duref:`io@` and an I/O write :duref:`io!` command (Forth words). 
-The words look much like the memory read :duref:`@` and memory write :duref:`!` 
+Mecrisp Ice supports both an I/O ``io@`` and an I/O write ``io!`` command (Forth words). 
+The words look much like the memory read :duref:``@`` and memory write ``!`` 
 words but they work a better differently.   For memory reads and writes, the 
 address really is a 13/16/32/64 bit address.  For I/O reads and writes, the 16 bit I/O address 
 really represents one of 16 ports, each represented by a bit.  This I/O model comes from the MSP430 chips.  

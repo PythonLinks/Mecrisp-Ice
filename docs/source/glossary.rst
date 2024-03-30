@@ -152,8 +152,10 @@ Arithmetic involving double numbers
         s>d             ( n -- d ) Makes a signed single number double length
 
 
-Comparisons  Checks if the TOS is ___ than the NOS
---------------------------------------------------
+Comparisons  
+-----------
+
+Checks if the TOS is ___ than the NOS
 
 ::
                              
@@ -661,3 +663,22 @@ Insight tools that are gone after NEW in targets with 8 kb only
         seec            ( -- ) Continue to see at disasm-$
         see name        ( -- ) See the definition
 
+Additional Words
+----------------
+
+Here are words that are in the gateware, but not previously listed in this glossary.   I mention them here, 
+but I am not sure what they do, nor where they belong.  If you read their code, and 
+are confident of what they do, please post an issue, so that I can update this glossary.  Or better yet, issue a pull request. 
+
+::
+
+    buffer: ( u "<name>" -- ; -- addr )
+    delay: (u -- ) Wait so many clock ticks.
+    digit
+    digit?
+    link@
+    nop  ( -- )  No operation.  Does nothing. 
+    now
+    pause
+    welcome  ( -- ) display a welcome message
+    

@@ -46,13 +46,15 @@ If you have any questions, please post them on `our discussion board
 
 Mecrisp Ice, and its documentation are under active development.   The 16 bit dual port version and the 16 port quickstore version are both flying in space.  Lots more people are using  them here on earth. 
 
-This documentation is being written as part of Christopher Lozinski's master's thesis.  Because of University rules, you are allowed to contribute new pages, or edit the glossary, but I am not allowed to accept edits to existing pages until July 2024.  In the meantime, comments on the pages I wrote are most welcome!
+Posting issues and pull requests is most welcome.  I am currently writing a master's thesis using Mecrisp Ice. By August the publication embargo should be lifted, and a lot more material will hopefully be added to this site. 
 
 Contents
 --------
 
 .. toctree::
 
-   usage
+
    api
    glossary
+   io
+   usage

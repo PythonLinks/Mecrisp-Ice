@@ -44,7 +44,7 @@ There are also a number of verilator simulators.
 * verilator-32bit-singleport
 * verilator-64bit
 
-To run them, first `install Verilator<https://verilator.org/guide/latest/install.html>`_, change into the appropriate directory and type:
+To run them, first `install Verilator <https://verilator.org/guide/latest/install.html>`_, change into the appropriate directory and type:
 
 ::
 

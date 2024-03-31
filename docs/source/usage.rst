@@ -8,9 +8,9 @@ Installation
 
 To use Mecrisp Ice, You have to do three things. 
 
-* Download Mecrisp Ice from `download Page on SourceForge <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. 
-* Download and install the open source Yosys `OSS CAD suite development tools<https://yosyshq.readthedocs.io/en/latest/install.html>`_.  
-* Download and install `Free Pascal<https://www.freepascal.org/download.html>`_
+1) Download Mecrisp Ice from `download Page on SourceForge <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. 
+2) Download and install the open source Yosys OSS CAD suite `development tools<https://yosyshq.readthedocs.io/en/latest/install.html>`_
+3) Download and install `Free Pascal<https://www.freepascal.org/download.html>`_
 
 Now change into the root directory and compile the Miecrisp Ice Forth Emulator. 
 

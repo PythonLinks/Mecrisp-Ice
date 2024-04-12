@@ -13,7 +13,7 @@ Use the ``--hdm`` flag
 
 ``sudo ./e4thcom -d ttyACM1 -b B115200 --hdm -t mecrisp-qs``
 
-The next is to not overwhelm the memory.  The Mecrisp Ice 16 bit single port RAM version assumes 8K words of memory.  The newer Ice40Up5K has even less block RAM.  Rhere are only 30, 
+The next is to not overwhelm the memory.  The Mecrisp Ice 16 bit single port RAM version assumes 8K words of memory.  The newer Ice40Up5K has even less block RAM.  There are only 30, 
 not 32 block RAMs, so that you only have 7680 words of memory. So if your test suites crash, 
 then try ``here .`` to make sure that you are not past the 8K word limit.  Then shrink down the program you are uploading. 
 

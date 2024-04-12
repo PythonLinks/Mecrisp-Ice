@@ -57,4 +57,6 @@ Contents
    api
    glossary
    io
+   test-suite
+   e4thcom
    usage

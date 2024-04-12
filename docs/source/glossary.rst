@@ -277,7 +277,8 @@ Number base
 Memory access
 -------------- 
 
-:
+::
+
         cmove           ( c-addr1 c-addr2 u -- ) Moves backward
         cmove>          ( c-addr1 c-addr2 u -- ) Moves forward
         move            ( c-addr1 c-addr2 u -- ) Moves u Bytes in Memory

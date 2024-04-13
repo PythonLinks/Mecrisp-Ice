@@ -14,8 +14,7 @@ Here is the basic command.
 
 There are three different possible choices for the -t option.  ``mecrisp``,    ``mecrisp-qs`` and  ``mecrisp-st``.  The e4thcom author recommends that you use the ``-t mecrisp`` version for 16 bit systems and the  ``-t mecrisp-st`` for 32 bit versions.  
 
-The ``--hdm`` option tells it to run at half duplex.   The problem is that on my 12 Mhz pico-ice board it would only accept about 34 characters per line, before having a problem.  On faster boards you should be able to drop the ``--hdm``
-option. 
+The ``--hdm`` option tells it to run at half duplex.   The problem is that on my 12 Mhz pico-ice board it would only accept about 34 characters per line, before having a problem. In half duplex, e4thcom waits, after sending a char, until an echo is received.   With faster clocks you should be able to drop the ``--hdm`` option.  The pico-ice also runs at 48Mhz.  
 
 The next challenge is to not overwhelm the memory.  The Mecrisp Ice 16 bit single port RAM version assumes 8K words of memory.  The newer Ice40Up5K has even less block RAM.  There are only 30, 
 not 32 block RAMs, so that you only have 7680 words of memory. So if your test suites crash, 

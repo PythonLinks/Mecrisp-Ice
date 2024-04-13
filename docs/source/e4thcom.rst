@@ -32,11 +32,9 @@ If you have problems, you can run it  like this
 
 And post the ``test-mecrisp-ice.txt`` as an issue on the github repository, linked in the upper right hand corner of this page.  
 
-    In the process of debugging it, the e4thcom author wrote a brilliant email. 
+In the process of debugging it, the e4thcom author wrote a brilliant email. 
 
-
-::
-  On 12.04.24 I wrote to the author
+  On 12.04.24 
 
     If I type this line, the cursor hovers over the last l,
     : char+ ( u -- u+1 ) 1+ ; 1 foldable

@@ -55,6 +55,7 @@ Contents
 
 
    api
+   contact
    glossary
    io
    test-suite

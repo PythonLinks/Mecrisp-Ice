@@ -41,11 +41,11 @@ The next complexity is that words are defined with both ``:`` and ``::``.  How t
 
 2. Later, in the cross compiler, ``::`` defines cross compiler words.  These are only available to the cross compiler dictorionary and not to gForth. 
 
-3.  When loading ``instructions-*.fs``, ``:`` defines cross comipiler words and  ``::`` defines words for the target FPGA.   Really what ``::`` does is a bitwise or of the instruction words defined with ``:``
+3.  When loading ``instructions-*.fs``, ``:`` defines cross comipiler words and  ``::`` also defines cross compiler words.   Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.
 
 4. When loading the target forth source, there is only ``:``. ``header-\*`` words convert cross-compiled words into bitstream words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
 
-It is all quite confusing.  Did you get that?  More importantly did I get that right?  
+Did you get that?  is all quite confusing. More importantly did I get that right?  
 
 Words Added to the GForth Main Dictionary
 *****************************************

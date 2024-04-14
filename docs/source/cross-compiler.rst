@@ -5,14 +5,21 @@ This page documents the Mecrisp-Ice cross compiler.
 
 ``???`` denotes the parts that I still do not understand. 
 
-The cross compiler files are in ./common-crosscompiler.
-The cross compiler itself is in ``cross.*.fs`` where the ``*`` denotes for which architecture it works on. 
-In that directory you will also find the ``nucleus*.fs`` files which define the words executed by the hardware. 
+The cross compiler files are in ``./common-crosscompiler``.
+The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes for which architecture it works on. 
+In that directory you will also find the ``instructions-*.fs`` files which define the words provided by the hardware. 
 
-Usage ``gforth cross.fs <machine.fs> <program.fs>``
-Where ``machine.fs`` defines the target architecure
-and ``program.fs`` is the program for the target device. 
-Once you have the nucleus on the target device, you have enough to boot an entire Forth system, and define new words on the device.   
+Usage
+-----
+
+:: 
+
+   gforth cross.fs <machine.fs> <program.fs>
+
+  Where ``machine.fs`` defines the target architecure
+  and ``program.fs`` is the program for the target device. 
+
+First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That is enough to allow for programs to get compile, then you can load your application. 
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 
@@ -264,6 +271,8 @@ And what is this?
 : tbranches cells _tbranches + ;
 
 What is a high call?
+
+what is the -8kb stuff.  I thought all of the J1 16 bits architectures could only access 8 kb. 
 
 wordlist constant target-wordlist
 : add-order ( wid -- ) >r get-order r> swap 1+ set-order ;

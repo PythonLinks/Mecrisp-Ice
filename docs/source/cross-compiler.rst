@@ -2,20 +2,20 @@ Cross Compiler
 ==============
 
 This page documents the Mecrisp-Ice cross compiler.  
-Historically cross compilers are most difficult to understand. 
+Historically cross compilers are most difficult to understand.
+``???`` denotes the parts that I still do not understand. 
 
-@PythonLinks: the cross compiler is most difficult to understand. 
+@PythonLinks: "the cross compiler is most difficult to understand." 
 
-@Mecrisp: I agree. And this is *after* I commented it.  The one by James Bowman is even harder to read.
+@Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
-The first complexity is that words are defined with both : and ::.  In the cross compiler initially : defines gforth words, then : defines cross compier words, and :: defines downloaded words.   Similarly in the nulcleus.fs files : defines cross comipiler words and :: defines downloaded words.  The header-* commands also define downloaded words. 
+The first complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later ``:`` defines cross compier words, and ``::`` defines downloaded words.   Later in the nucleus-*.fs files ``:`` defines cross comipiler words and ``::`` defines downloaded words.   The header-* converts cross-compiled words into downloaded words.  And finally when loading the forth files ``:`` refers to words which are in the local dictionary, which does get downloaded. 
 
 The next complexiy is that there are three dictionaries  
 
 1. The main gforth dictionary to which are added a few helpers and tools like #d and #h defined below. 
 
-2. One for the definitions and labels that are available only when the crosscompiler is running, but 
-are not downloaded to the FPGA.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. 
+2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. 
 They are not downloaded to the FPGA, to prevent bloat.  There are a lot more named definitions in nucleus.fs than in the dictionaty chain of the final binary image.  They could be added to the final image using the header commands. 
 
 3. One for the words that end up in the final bitstream.  These word definitions start with ::
@@ -32,17 +32,17 @@ tcell  ( -- cellsize ) Number of bytes in a word.  2/4/8 for 16/32/64 bit design
 
 tbits  ( -- bits ) Number of bits in a word. 
 
-tmask  ( -- mask ) 
+tmask  ( -- mask ) ???
 
-tcells ( n -- n*cell ) 
+tcells ( n -- n*cell )  ???
 
-tcell+ ( n -- n+cell ) 
+tcell+ ( n -- n+cell ) ???
 
 tflash The size of the final image.
 
 _tbranches Stores branch addressess to simplify cross compilation.  Also saved to the build directory. 
 
-tbranches
+tbranches ???
 
 tdp Target dictionary Pointer.  used by ``here``
 
@@ -62,35 +62,40 @@ twalign  ( -- )   Make target dictionary pointer even
 tc,      ( c -- ) Add byte to target dictionary
 tw,      ( w -- ) Add word to target dictionary
 
-target-wordlist
+target-wordlist This is the list of words to be written to the FPGA. 
+
 add-order
 
-Cross Compiler  Words
+Cross Compiler Words
 --------------------
 
-First we have gForth words which are included in the cross compiled environment. 
+Hre are gForth words which are included in the cross compiled environment.  Significantly this makes all of the source GPL.  
 
 (  Comments
 \  Comments
 
 org         Write to target dictionary pointer.
-include       
-included      
-[if]          
-[else]       
-[then]       
+include       ???
+included      ??? 
+[if]         ???  
+[else]        ???
+[then]        ???
 
-literal Generates a literal defined by the first bit being set to 1.  If the number already has a first bit ste to 1, inverts it, sets the first bit to 1, and then adds the invert command.
+literal Generates a literal defined by the first bit being set to 1.  If the number already has a first bit ste to 1, inverts it, sets the first bit to 1, and then adds the invert command to the emitted Forth. 
 
 tail-call-optimisation If the last word in a definition is a call, then we can just return up another level. 
 
 header  Adds a word to the target dictionary.
 
-header-imm
-header-imm-0-foldable
+header-imm  Adds an immediate word to the target dictionary. 
+
 
 These words add a word to the target dictionary, and mark that it is foldable if that 
-many arguments are all literals. 
+many arguments are all literals.  For example 2 3 + is 2 foldable and just generaes a 5, 
+rather than downloading all of those arguments to the FPGA> 
+
+header-imm-0-foldable Adds an immediate foldable word to the target dictionary. 
+
 
 header-0-foldable
 

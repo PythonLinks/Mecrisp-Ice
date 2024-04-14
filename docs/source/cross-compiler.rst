@@ -27,7 +27,7 @@ The first complexiy is that there are three dictionaries
 
 3. The target dictionary for words that are downloaded to the target FPGA.  
 
-Words from the cross compiler dictionary can be added to the target dictionary by using the ''header-*`` words.
+Words from the cross compiler dictionary can be added to the target dictionary by using the ``header-*`` words.
 
 The next complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later, in the cross compiler,   ``::`` defines cross compiler words.  
 
@@ -66,12 +66,17 @@ Edit the Memory Area to be copied to Flash
 ------------------------------------------
 
 tc!      ( c t-addr -- )  Write a byte/character to a memory area to be copied to flash. 
+
 tc@      ( t-addr -- c )  Read a byte/character from the memory area to be copied to flash. 
+
 tw!      ( w t-addr -- )  Write a word to the memory area to be copied to flash. 
+
 tw@      ( t-addr -- w )  Read a word from the memory area to be copied to flash.  Unsigned, as expected for 16 bit target memory contents.
 
 twalign  ( -- )   Make target dictionary pointer even
+
 tc,      ( c -- ) Add byte/character to target dictionary
+
 tw,      ( w -- ) Add word to target dictionary
 
 target-wordlist This is the list of words to be written to the FPGA's RAM. 

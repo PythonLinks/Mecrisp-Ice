@@ -1,28 +1,40 @@
 Cross Compiler
-==============
+###############
 
 This page documents the Mecrisp-Ice cross compiler.  
-Historically cross compilers are most difficult to understand.
+
 ``???`` denotes the parts that I still do not understand. 
+
+The cross compiler files are in ./common-crosscompiler.
+The cross compiler itself is in ``cross.*.fs`` where the ``*`` denotes for which architecture it works on. 
+In that directory you will also find the ``nucleus*.fs`` files which define the words executed by the hardware. 
+
+Usage ``gforth cross.fs <machine.fs> <program.fs>``
+Where ``machine.fs`` defines the target architecure
+and ``program.fs`` is the program for the target device. 
+Once you have the nucleus on the target device, you have enough to boot an entire Forth system, and define new words on the device.   
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 
 @Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
-The first complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later ``:`` defines cross compier words, and ``::`` defines downloaded words.   Later in the nucleus-*.fs files ``:`` defines cross comipiler words and  ``:`` defines downloaded words.   The header-* converts cross-compiled words into downloaded words.  And finally when loading the forth files ``:`` refers to words which are in the local dictionary, which does get downloaded. 
 
-The next complexiy is that there are three dictionaries  
+The first complexiy is that there are three dictionaries  
 
-1. The main gforth dictionary to which are added a few helpers and tools like #d and #h defined below. 
+1. The main gforth dictionary to which are added a few helpers and tools as listed below. . 
 
-2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. 
-They are not downloaded to the FPGA, to prevent bloat.  There are a lot more named definitions in nucleus.fs than in the dictionaty chain of the final binary image.  They could be added to the final image using the header commands. 
+2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary.   This dictionary is initially populted by the cross-compiler, and additional words are added by ``nucleus-*.fs``.  There are a lot more named definitions in nucleus.fs than in the dictionaty chain of the final binary image. 
 
-3. One for the words that end up in the final bitstream.  These word definitions start with ::
-The dictionary entries defined with the header-... macros are also available in the final crosscompiled nucleus.
+3. The target dictionary for words that are downloaded to the target FPGA.  
+
+Words from the cross compiler dictionary can be added to the target dictionary by using the ''header-*`` words.
+
+The next complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later, in the cross compiler,   ``::`` defines cross compiler words.  
+
+The cross compiler loads the appropriate ``nucleus-*.fs`` file.  In the nucleus files, ``:`` defines cross comipiler words and  ``::`` defines words for the target FPGA.   The ``header-\*`` words convert cross-compiled words into bitstream words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  Did you get that?  More importantly did I get that right?
 
 Words Added to the GForth Main Dictionary
------------------------------------------
+*****************************************
 
 #d  Interprets the next string as a decimal. 
 
@@ -32,11 +44,11 @@ tcell  ( -- cellsize ) Number of bytes in a word.  2/4/8 for 16/32/64 bit design
 
 tbits  ( -- bits ) Number of bits in a word. 
 
-tmask  ( -- mask ) ???
+tmask  ( -- mask ) Adds one to the number of tbits.  ??? What is this used for?
 
-tcells ( n -- n*cell )  ???
+tcells ( n -- n*cell )  Total amount of FPGA RAM to be initialized.
 
-tcell+ ( n -- n+cell ) ???
+tcell+ ( n -- n+cell ) Adds n to the amount of RAM required. 
 
 tflash The size of the final image.
 
@@ -53,35 +65,35 @@ there ( -- n) Read from target dictionary pointer.
 Edit the Memory Area to be copied to Flash
 ------------------------------------------
 
-tc!      ( c t-addr -- )  Write a character to a memory area to be copied to flash. 
-tc@      ( t-addr -- c )  Read a character from the memory area to be copied to flash. 
+tc!      ( c t-addr -- )  Write a byte/character to a memory area to be copied to flash. 
+tc@      ( t-addr -- c )  Read a byte/character from the memory area to be copied to flash. 
 tw!      ( w t-addr -- )  Write a word to the memory area to be copied to flash. 
 tw@      ( t-addr -- w )  Read a word from the memory area to be copied to flash.  Unsigned, as expected for 16 bit target memory contents.
 
 twalign  ( -- )   Make target dictionary pointer even
-tc,      ( c -- ) Add byte to target dictionary
+tc,      ( c -- ) Add byte/character to target dictionary
 tw,      ( w -- ) Add word to target dictionary
 
-target-wordlist This is the list of words to be written to the FPGA. 
+target-wordlist This is the list of words to be written to the FPGA's RAM. 
 
-add-order
+add-order  ???
 
 Cross Compiler Words
---------------------
+********************
 
-Hre are gForth words which are included in the cross compiled environment.  Significantly this makes all of the source GPL.  
+Hre are gForth words which are included in the cross compiled environment.  
 
 (  Comments
 \  Comments
 
 org         Write to target dictionary pointer.
-include       ???
-included      ??? 
+include     includes words from a Forth file. 
+included     ???
 [if]         ???  
 [else]        ???
 [then]        ???
 
-literal Generates a literal defined by the first bit being set to 1.  If the number already has a first bit ste to 1, inverts it, sets the first bit to 1, and then adds the invert command to the emitted Forth. 
+literal Generates a literal instruction defined by the first bit being set to 1.  If the number already has a first bit set to 1, inverts it, sets the now zero first bit to 1, and then adds the invert command to the emitted Forth. 
 
 tail-call-optimisation If the last word in a definition is a call, then we can just return up another level. 
 
@@ -89,13 +101,11 @@ header  Adds a word to the target dictionary.
 
 header-imm  Adds an immediate word to the target dictionary. 
 
-
-These words add a word to the target dictionary, and mark that it is foldable if that 
-many arguments are all literals.  For example 2 3 + is 2 foldable and just generaes a 5, 
-rather than downloading all of those arguments to the FPGA> 
+The following words add a word to the target dictionary, and mark that it is foldable if that 
+many arguments are all literals.  For example 2 3 + just generaes a 5, and is called 2 foldable. 
+This reduces the required memory area. 
 
 header-imm-0-foldable Adds an immediate foldable word to the target dictionary. 
-
 
 header-0-foldable
 
@@ -109,32 +119,30 @@ header-4-foldable
 
 :  This defines a new word, but only for the cross-compiler. 
 
-: wordstr ( "name" -- c-addr u )   \ Scan ahead in the input line in order to parse the next word without removing it from the input buffer.
-Just for pretty listing file printing, nothing special happens here.
-
+wordstr ( "name" -- c-addr u )   Scan ahead in the input line in order to parse the next word without removing it from the input buffer.  Just for pretty listing file printing, nothing special happens here.
 
 String Functions
 ----------------
 
->str ( c-addr u -- str ) \ a new u char string from c-addr
+>str ( c-addr u -- str ) A new u char string from c-addr.
 
-str@ 
+str@  (  c-addr -- str ) Read string from c-addr.
 
-str! ( str c-addr -- c-addr' ) \ copy str to c-addr
+str! ( str c-addr -- c-addr' ) Copy str to c-addr.
+
++str ( str2 str1 -- str3 ) Concatenate two strings. 
 
 
-+str ( str2 str1 -- str3 )
-  
+Output Words (for the bitstream)
+**************************************
+
 example
 
+resolve ( orig -- ) Forward reference from orig to this location
 
-resolve ( orig -- )\ Forward reference from orig to this location
+.trim ( a-addr u )  shorten string until it ends with '.'
 
-
-.trim ( a-addr u ) \ shorten string until it ends with '.'
-
-
-.suffix  ( c-addr u -- c-addr u ) \ e.g. "bar" -> "foo.bar"
+.suffix  ( c-addr u -- c-addr u ) e.g. "bar" -> "foo.bar"
 
 create-output-file w/o create-file throw ;
 
@@ -142,12 +150,6 @@ out-suffix ( s -- h ) \ Create an output file h with suffix s
    
 prepare-listing ( -- )
  
-
-
-
-
-
-
 dumpall Saves the memory, and also the word index. 
 
 base>number   ( caddr u base -- )
@@ -194,23 +196,20 @@ meta
 
 t' ( -- t-addr )  Tick for target definitions
 
-\ -----------------------------------------------------------------------------
-\  Numbers in crosscompilation environment.
-\  Unfortunately, it isn't easily possible to rewire the host's number parsing capabilities...
-\  Therefore, all numbers for target usage need to be prefixed with an ugly d# or h#
-\ -----------------------------------------------------------------------------
+Numbers in crosscompilation environment.
+Unfortunately, it isn't easily possible to rewire the host's number parsing capabilities...
+Therefore, all numbers for target usage need to be prefixed with an ugly d# or h#
 
 sign>number   ( c-addr1 u1 -- ud2 c-addr2 u2 )
 
 
+Stack effects for these are "final effects", actually they are writing literal opcodes.
 
-\ Stack effects for these are "final effects", actually they are writing literal opcodes.
+d#     ( -- x )    Defines a decimal number. 
 
-d#     ( -- x )    bl parse 10 base>number ;
+h#     ( -- x )    Defines a hex number
 
-h#     ( -- x )    bl parse 16 base>number ;
-
-[']    ( -- addr ) ' >body @ tcell * literal ;
+[']    ( -- addr ) pushes the address of a word onto the stack.
 
 [char] ( -- c )    char literal ;
 
@@ -227,14 +226,34 @@ until
 while      
 repeat   
 
+Wordlist juggling tools to properly switch into and out of the crosscompilation environment.\ 
+
+target    only target-wordlist add-order definitions ;
+]         target ;
+meta     forth definitions ;
+[        forth definitions ;
 
 
-\ -----------------------------------------------------------------------------
-\  Wordlist juggling tools to properly switch into and out of the crosscompilation environment.
-\ -----------------------------------------------------------------------------
+QUESTIONS
+*********
 
-: target    only target-wordlist add-order definitions ;
-: ]         target ;
-:: meta     forth definitions ;
-:: [        forth definitions ;
+This is where I ask the questions I am not yet sure about. 
+
+Why are we doing
+
+tflash      1024 32 * tcell * erase
+
+_tbranches  1024 64 * tcell * erase
+
+I thought it should be 8K 16 tcell * * erase
+
+And what is this? 
+
+: tbranches cells _tbranches + ;
+
+What is a high call?
+
+wordlist constant target-wordlist
+: add-order ( wid -- ) >r get-order r> swap 1+ set-order ;
+: :: get-current >r target-wordlist set-current : r> set-current ;
 

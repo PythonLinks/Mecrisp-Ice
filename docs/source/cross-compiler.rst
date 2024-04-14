@@ -9,7 +9,7 @@ Historically cross compilers are most difficult to understand.
 
 @Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
-The first complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later ``:`` defines cross compier words, and ``::`` defines downloaded words.   Later in the nucleus-*.fs files ``:`` defines cross comipiler words and ``::`` defines downloaded words.   The header-* converts cross-compiled words into downloaded words.  And finally when loading the forth files ``:`` refers to words which are in the local dictionary, which does get downloaded. 
+The first complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later ``:`` defines cross compier words, and ``::`` defines downloaded words.   Later in the nucleus-*.fs files ``:`` defines cross comipiler words and  ``:`` defines downloaded words.   The header-* converts cross-compiled words into downloaded words.  And finally when loading the forth files ``:`` refers to words which are in the local dictionary, which does get downloaded. 
 
 The next complexiy is that there are three dictionaries  
 

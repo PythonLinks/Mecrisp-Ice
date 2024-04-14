@@ -18,7 +18,6 @@ Once you have the nucleus on the target device, you have enough to boot an entir
 
 @Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
-
 The first complexiy is that there are three dictionaries  
 
 1. The main gforth dictionary to which are added a few helpers and tools as listed below. . 
@@ -29,9 +28,17 @@ The first complexiy is that there are three dictionaries
 
 Words from the cross compiler dictionary can be added to the target dictionary by using the ``header-*`` words.
 
-The next complexity is that words are defined with both ``:`` and ``::``.  In the cross compiler initially ``:`` defines gforth words, later, in the cross compiler,   ``::`` defines cross compiler words.  
+The next complexity is that words are defined with both ``:`` and ``::``.  How that works depends on the 4 different stages. 
 
-The cross compiler loads the appropriate ``nucleus-*.fs`` file.  In the nucleus files, ``:`` defines cross comipiler words and  ``::`` defines words for the target FPGA.   The ``header-\*`` words convert cross-compiled words into bitstream words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  Did you get that?  More importantly did I get that right?
+1. Initially in the cross compiler ``:`` works normally and defines gforth words.
+
+2. Later, in the cross compiler, ``::`` defines cross compiler words.  These are only available to the cross compiler dictorionary and not to gForth. 
+
+3.  When loading ``instructions-*.fs``, ``:`` defines cross comipiler words and  ``::`` defines words for the target FPGA.   Really what ``::`` does is a bitwise or of the instruction words defined with ``:``
+
+4. When loading the target forth source, there is only ``:``. ``header-\*`` words convert cross-compiled words into bitstream words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
+
+It is all quite confusing.  Did you get that?  More importantly did I get that right?  
 
 Words Added to the GForth Main Dictionary
 *****************************************

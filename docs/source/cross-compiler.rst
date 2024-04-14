@@ -108,6 +108,46 @@ header-4-foldable
 Just for pretty listing file printing, nothing special happens here.
 
 
+String Functions
+----------------
+
+>str ( c-addr u -- str ) \ a new u char string from c-addr
+
+str@ 
+
+str! ( str c-addr -- c-addr' ) \ copy str to c-addr
+
+
++str ( str2 str1 -- str3 )
+  
+example
+
+
+resolve ( orig -- )\ Forward reference from orig to this location
+
+
+.trim ( a-addr u ) \ shorten string until it ends with '.'
+
+
+.suffix  ( c-addr u -- c-addr u ) \ e.g. "bar" -> "foo.bar"
+
+create-output-file w/o create-file throw ;
+
+out-suffix ( s -- h ) \ Create an output file h with suffix s
+   
+prepare-listing ( -- )
+ 
+
+
+
+
+
+
+dumpall Saves the memory, and also the word index. 
+
+base>number   ( caddr u base -- )
+
+
 Words Available on the FPGA
 ---------------------------
 
@@ -142,13 +182,12 @@ DOUBLE ( -- )  Generates a call to the next location. The following part of the 
 Wordlist juggling tools to properly switch into and out of the crosscompilation environment.
 --------------------------------------------------------------------------------------------
 
- 
-: target    only target-wordlist add-order definitions ;
-: ]         target ;
-:: meta     forth definitions ;
-:: [        forth definitions ;
+target   
+]       
+meta     
+[         
 
-: t' ( -- t-addr ) bl parse target-wordlist search-wordlist 0= throw >body @ ; \ Tick for target definitions
+t' ( -- t-addr )  Tick for target definitions
 
 \ -----------------------------------------------------------------------------
 \  Numbers in crosscompilation environment.
@@ -156,147 +195,34 @@ Wordlist juggling tools to properly switch into and out of the crosscompilation 
 \  Therefore, all numbers for target usage need to be prefixed with an ugly d# or h#
 \ -----------------------------------------------------------------------------
 
-: sign>number   ( c-addr1 u1 -- ud2 c-addr2 u2 )
-    0. 2swap
-    over c@ [char] - = if
-        1 /string
-        >number
-        2swap dnegate 2swap
-    else
-        >number
-    then
-;
+sign>number   ( c-addr1 u1 -- ud2 c-addr2 u2 )
 
-: base>number   ( caddr u base -- )
-    base @ >r base !
-    sign>number
-    r> base !
-    dup 0= if
-        2drop drop literal
-    else
-        1 = swap c@ [char] . = and if
-            drop dup literal 16 rshift literal
-        else
-            -1 abort" Bad number."
-        then
-    then ;
+
 
 \ Stack effects for these are "final effects", actually they are writing literal opcodes.
 
-:: d#     ( -- x )    bl parse 10 base>number ;
-:: h#     ( -- x )    bl parse 16 base>number ;
-:: [']    ( -- addr ) ' >body @ tcell * literal ;
-:: [char] ( -- c )    char literal ;
+d#     ( -- x )    bl parse 10 base>number ;
 
-\ -----------------------------------------------------------------------------
-\  Control structures for the crosscompiler.
-\  This is much more comfortable than using labels and jumps manually.
-\ -----------------------------------------------------------------------------
+h#     ( -- x )    bl parse 16 base>number ;
 
-: resolve ( orig -- )
-    tdp @ over tbranches ! \ Forward reference from orig to this location
-    dup tw@ tdp @ tcell / or swap tw!
-;
+[']    ( -- addr ) ' >body @ tcell * literal ;
 
-:: if      tdp @ 0 0branch ;
-:: then    resolve ;
-:: else    tdp @ 0 ubranch swap resolve ;
-:: begin   tdp @ ;
-:: again   tcell / ubranch ;
-:: until   tcell / 0branch ;
-:: while   tdp @ 0 0branch ;
-:: repeat  swap tcell / ubranch resolve ;
+[char] ( -- c )    char literal ;
 
-\ -----------------------------------------------------------------------------
-\  A little mess just for handling output file names.
-\  Quite unimportant for understanding the crosscompiler.
-\ -----------------------------------------------------------------------------
 
-: .trim ( a-addr u ) \ shorten string until it ends with '.'
-    begin
-        2dup + 1- c@ [char] . <>
-    while
-        1-
-    repeat
-;
+ 
+ 
 
-( Strings                                    JCB 11:57 05/18/12)
+if       
+then     
+else     
+begin    
+again    
+until   
+while      
+repeat   
 
-: >str ( c-addr u -- str ) \ a new u char string from c-addr
-    dup cell+ allocate throw dup >r
-    2dup ! cell+    \ write size into first cell
-                    ( c-addr u saddr )
-    swap cmove r>
-;
-: str@  dup cell+ swap @ ;
-: str! ( str c-addr -- c-addr' ) \ copy str to c-addr
-    >r str@ r>
-    2dup + >r swap
-    cmove r>
-;
-: +str ( str2 str1 -- str3 )
-    over @ over @ + cell+ allocate throw >r
-    over @ over @ + r@ !
-    r@ cell+ str! str! drop r>
-;
 
-: example
-    s"  sailor" >str
-    s" hello" >str
-    +str str@ type
-;
-
-next-arg 2dup .trim >str constant prefix.
-: .suffix  ( c-addr u -- c-addr u ) \ e.g. "bar" -> "foo.bar"
-    >str prefix. +str str@
-;
-: create-output-file w/o create-file throw ;
-: out-suffix ( s -- h ) \ Create an output file h with suffix s
-    >str
-    prefix. +str
-    s" build/" >str +str str@
-    create-output-file
-;
-
-: prepare-listing ( -- )
-    s" lst" out-suffix lst !
-;
-
-\ -----------------------------------------------------------------------------
-\  Finally, load the source file which shall be crosscompiled.
-\ -----------------------------------------------------------------------------
-
-prepare-listing
-
-tcell org
-
-variable insertquit \ This is a hack to backpatch the address of quit.
-
-target included      \ Include the source file of the nucleus to be crosscompiled
-
-[ tdp @ 0 org ] jmp main [ org ]
-[ tdp @ insertquit @ org ] jmp quit [ org ]
-
-meta
-
-\ -----------------------------------------------------------------------------
-\  Crosscompilation done. Write target binary image to file.
-\ -----------------------------------------------------------------------------
-
-decimal
-
-0 value file
-
-: dumpall
-    s" hex" out-suffix to file
-
-    hex
-    8192 0 do
-        i tcell * tw@
-        s>d <# tcell 2* 0 do # loop #> file write-line throw
-    loop
-    file close-file
-;
 
 \ -----------------------------------------------------------------------------
 \  Wordlist juggling tools to properly switch into and out of the crosscompilation environment.

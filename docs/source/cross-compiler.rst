@@ -6,7 +6,7 @@ This page documents the Mecrisp-Ice cross compiler.
 ``???`` denotes the parts that I still do not understand. 
 
 The cross compiler files are in ``./common-crosscompiler``.
-The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes for which architecture it works on. 
+The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
 In that directory you will also find the ``instructions-*.fs`` files which define the words provided by the hardware. 
 
 Usage
@@ -16,10 +16,10 @@ Usage
 
    gforth cross.fs <machine.fs> <program.fs>
 
-  Where ``machine.fs`` defines the target architecure
+  Where ``machine.fs`` defines the Forth words provided by the hardware.
   and ``program.fs`` is the program for the target device. 
 
-First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That is enough to allow for programs to get compile, then you can load your application. 
+How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That  enables program compilation then you load Mecrisp libraries and your application. 
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 
@@ -27,9 +27,9 @@ First you load the instructions into the cross compiler.  That defines words tha
 
 The first complexiy is that there are three dictionaries  
 
-1. The main gforth dictionary to which are added a few helpers and tools as listed below. . 
+1. The main gforth dictionary to which are added a few helpers and tools as listed below.  
 
-2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary.   This dictionary is initially populted by the cross-compiler, and additional words are added by ``nucleus-*.fs``.  There are a lot more named definitions in nucleus.fs than in the dictionaty chain of the final binary image. 
+2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populted by the cross-compiler, and additional words are added by ``nucleus-*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
 
 3. The target dictionary for words that are downloaded to the target FPGA.  
 
@@ -43,9 +43,9 @@ The next complexity is that words are defined with both ``:`` and ``::``.  How t
 
 3.  When loading ``instructions-*.fs``, ``:`` defines cross comipiler words and  ``::`` also defines cross compiler words.   Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.
 
-4. When loading the target forth source, there is only ``:``. ``header-\*`` words convert cross-compiled words into bitstream words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
+4. When loading the forth libraries and application, there is only ``:``. ``header\*`` words convert cross-compiled words into target dictionary words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
 
-Did you get that?  is all quite confusing. More importantly did I get that right?  
+Did you get that?  It is all quite confusing. More importantly did I get that right?  
 
 Words Added to the GForth Main Dictionary
 *****************************************
@@ -62,7 +62,7 @@ tmask  ( -- mask ) Adds one to the number of tbits.  ??? What is this used for?
 
 tcells ( n -- n*cell )  Total amount of FPGA RAM to be initialized.
 
-tcell+ ( n -- n+cell ) Adds n to the amount of RAM required. 
+tcell+ ( n -- n+cell ) Adds n to the amount of RAM to be initialized. 
 
 tflash The size of the final image.
 
@@ -121,8 +121,8 @@ header  Adds a word to the target dictionary.
 header-imm  Adds an immediate word to the target dictionary. 
 
 The following words add a word to the target dictionary, and mark that it is foldable if that 
-many arguments are all literals.  For example 2 3 + just generaes a 5, and is called 2 foldable. 
-This reduces the required memory area. 
+many arguments are all literals.  For example 2 3 + just generaes a 5, and ``+`` is called 2 foldable. 
+This reduces the required memory. 
 
 header-imm-0-foldable Adds an immediate foldable word to the target dictionary. 
 
@@ -136,7 +136,7 @@ header-3-foldable
 
 header-4-foldable
 
-:  This defines a new word, but only for the cross-compiler. 
+:  Half way through the ``cross-compiler-*.fs``, ``:`` is redefined.  It still defines a new word, but only for the cross-compiler. There are commands to switch between using the cross-compiler dictionary and the target dictionary. 
 
 wordstr ( "name" -- c-addr u )   Scan ahead in the input line in order to parse the next word without removing it from the input buffer.  Just for pretty listing file printing, nothing special happens here.
 
@@ -152,7 +152,7 @@ str! ( str c-addr -- c-addr' ) Copy str to c-addr.
 +str ( str2 str1 -- str3 ) Concatenate two strings. 
 
 
-Output Words (for the bitstream)
+Words for the Target Dictionary
 **************************************
 
 example
@@ -209,8 +209,11 @@ Wordlist juggling tools to properly switch into and out of the crosscompilation 
 --------------------------------------------------------------------------------------------
 
 target   
+
 ]       
+
 meta     
+
 [         
 
 t' ( -- t-addr )  Tick for target definitions
@@ -220,7 +223,6 @@ Unfortunately, it isn't easily possible to rewire the host's number parsing capa
 Therefore, all numbers for target usage need to be prefixed with an ugly d# or h#
 
 sign>number   ( c-addr1 u1 -- ud2 c-addr2 u2 )
-
 
 Stack effects for these are "final effects", actually they are writing literal opcodes.
 
@@ -237,19 +239,29 @@ h#     ( -- x )    Defines a hex number
  
 
 if       
+
 then     
+
 else     
+
 begin    
+
 again    
+
 until   
+
 while      
+
 repeat   
 
 Wordlist juggling tools to properly switch into and out of the crosscompilation environment.\ 
 
 target    only target-wordlist add-order definitions ;
-]         target ;
-meta     forth definitions ;
+
+]         target 
+
+meta     forth definitions 
+
 [        forth definitions ;
 
 

@@ -51,19 +51,24 @@ Single-Jugglers
 ---------------                             
 
 ::     
-                             
-        depth           ( -- +n ) Stack depth. Doubles  count twice.
-        rdepth          ( -- +n ) return stack depth.  
-        nip             ( x1 x2 -- x2 )
+
         drop            ( x -- )
-        rot             ( x1 x2 x3 -- x2 x3 x1 )
-        -rot            ( x1 x2 x3 -- x3 x1 x2 )
-        swap            ( x1 x2 -- x2 x1 )
+        dup             ( x -- x x )
+        nip             ( x1 x2 -- x2 )
+        swap            ( x1 x2 -- x2 x1 ) 
         tuck            ( x1 x2 -- x2 x1 x2 )
         over            ( x1 x2 -- x1 x2 x1 )
+        rot             ( x1 x2 x3 -- x2 x3 x1 )
+        -rot            ( x1 x2 x3 -- x3 x1 x2 )
         ?dup            ( x -- 0 | x x ) if true dup
-        dup             ( x -- x x )
 
+        depth           ( -- +n ) Stack depth. Doubles  count twice.
+
+Return Stack Operations
+-----------------------
+
+::
+        rdepth          ( -- +n ) return stack depth. 
         >r              ( x -- ) (R: -- x )
         r>              ( -- x ) (R: x -- )
         r@              ( -- x ) (R: x -- x )

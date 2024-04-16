@@ -1,11 +1,14 @@
 Cross Compiler
 ###############
 
-This page documents the Mecrisp-Ice cross compiler.  
+This page documents the Mecrisp-Ice cross compiler.  The cross compiler runs on the desktop,  takes an instruction set, and a  nucleus file and generates a hexadecimal file which verilog can load into the FPGA.  In mecrisp-ice that hex file is merged on the desktop with mecrisp libraries and your applicaiton program before being downloaded in the FPGA bitstream.  The cross compiler suports `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_
 
-``???`` denotes the parts that I still do not understand.
+@PythonLinks: "the cross compiler is most difficult to understand." 
 
-The cross compiler suports `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_
+@Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
+
+So ``???`` denotes the parts that I still do not understand.
+
 
 The cross compiler files are in ``./common-crosscompiler``.
 The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
@@ -23,9 +26,6 @@ Usage
 
 How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
 
-@PythonLinks: "the cross compiler is most difficult to understand." 
-
-@Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
 The first complexiy is that there are three dictionaries.  What gForth calls ``word lists``.   
 

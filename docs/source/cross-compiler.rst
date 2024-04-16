@@ -22,25 +22,29 @@ Usage
 
 How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each hardware instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
 
+Once the nucleus is coss-compiled, althernatively, you could download it to the FPGA, load programs to the FPGA, and save them to the Flash, maybe copy them to other FPGA's bitstreams.  Yosys lets you copy a executable image into a bit stream.  
+
 The cross compiler files are in ``./common-crosscompiler``.
 The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
 In that directory you will also find the ``instructionsset-*.fs`` files which define the words provided by the hardware. 
 
 The first complexiy is that there are three dictionaries.  What gForth calls ``word lists``.   
 
-1. The main gforth dictionary to which are added a few helpers and tools as listed below.  
+1. The main gForth dictionary to which are added a few helpers and tools as listed below.  
 
-2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populated by the cross-compiler, and additional words are added by ``instructionset-*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
+2. The cross compiler dictionary includes the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, 
+so that in order to not break gForth, they are in a separate dictionary. This dictionary is initially populated by the cross-compiler, and additional words are added by ``instructionset-*.fs``.  Words defined in the cross compiler dictionary are marked in this documentation by preceeding them with a ``::``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.  You may want to review the words defined in the instruction set, and add them to your target executable. 
 
-3. The target dictionary for words that are downloaded to the target FPGA.  
+3. The target dictionary for words that are downloaded and executed on the target FPGA.  
 
 The next complexity is that words are defined with  ``:``, ``::`` and ``header-*``.
-Depending on the target word list, ``:`` either adds word to the base gForth word list, or to the 
+Depending on the current word list, ``:`` either adds word to the base gForth word list, or to the 
 cross compiler word list.  ``::`` adds words to the cross compiler word list, and ``header-*``
-adds them from the cross-compiler word list to the target word list.  Later, when loading Mecrisp libraries and application files, 
-``:`` adds words to the target word list.  Did you get that?  It is all quite confusing. More importantly did I get that right?  
+adds them to the target word list.  Later, when loading Mecrisp libraries and application files, 
+``:`` again acts normally, and adds words to the target word list.  Did you get that?  
+It is all quite confusing! More importantly did I get that right?  
 
-gForth supports multiple word lists.  When searching for a word,  there is a ``search-order`` for the word lists (dictionaries).   You can reorder the search list.   There is a variable called the curent word list.  When compiling a word, it gets added to the current word list.  You can also switch between current word lists with the following commands. 
+gForth supports multiple word lists.  When searching for a word,  there is a ``search-order`` for the word lists (dictionaries).   You can reorder the search order.   There is a variable called the curent word list.  When compiling a word, it gets added to the current word list.  You can also switch between current word lists with the following commands.  ??? Still not quite sure what each one does. 
 
 target   
 
@@ -54,6 +58,12 @@ meta     forth definitions
 Words Added to the gForth Main Dictionary
 *****************************************
 
+target-wordlist This is the list of words to be written to the FPGA's RAM. 
+
+_tbranches Stores branch addressess to simplify cross compilation.  Also saved to the build directory. 
+
+tbranches ???
+
 tcell  ( -- cellsize ) Number of bytes in a word.  2/4/8 for 16/32/64 bit designs.
 
 tbits  ( -- bits ) Number of bits in a word. 
@@ -65,10 +75,6 @@ tcells ( n -- n*cell )  Total amount of FPGA RAM to be initialized.
 tcell+ ( n -- n+cell ) Adds n to the amount of RAM to be initialized. 
 
 tflash The size of the final image.
-
-_tbranches Stores branch addressess to simplify cross compilation.  Also saved to the build directory. 
-
-tbranches ???
 
 tdp Target dictionary Pointer.  used by the next three words.
 
@@ -93,10 +99,8 @@ tc,      ( c -- ) Add byte/character to target dictionary
 
 tw,      ( w -- ) Add word to target dictionary
 
-
 add-order  ???
 
-target-wordlist This is the list of words to be written to the FPGA's RAM. 
 
 Numbers in crosscompilation environment
 ---------------------------------------
@@ -129,7 +133,6 @@ tail-call-optimisation If the last word in a definition is a call, then we can j
 Adding Words to the Target
 --------------------------
 
-
 The following words add a word to the target dictionary, and
 
 header  Adds a word to the target dictionary.
@@ -153,23 +156,6 @@ header-3-foldable
 
 header-4-foldable
 
-Words for Generating the Output File
------------------------------------
-example
-
-resolve ( orig -- ) Forward reference from orig to this location
-
-.trim ( a-addr u )  shorten string until it ends with '.'
-
-.suffix  ( c-addr u -- c-addr u ) e.g. "bar" -> "foo.bar"
-
-create-output-file w/o create-file throw ;
-
-out-suffix ( s -- h ) \ Create an output file h with suffix s
-   
-prepare-listing ( -- )
- 
-dumpall Saves the memory, and also the word index. 
 
 
 Cross Compiler Words
@@ -227,9 +213,9 @@ base>number   ( caddr u base -- )
 
 , ( w -- ) \ Add a word to target dictionary, this time visible from within the crosscompilation environment.
 
-allot ( u -- ) \ "Allot" space in the target dictionary by filling in zeros.
+allot ( u -- ) \ Allocate space in the target dictionary by filling in zeros. Can be a negative value. 
 
-; \ End a word definition
+; End a word definition
 
 jmp ( "name" -- )  Add jump opcode to destination label
 jz  ( "name" -- ) Add conditional opcode to destination label
@@ -249,6 +235,24 @@ Generates a call to the next location. The following part of the definition is t
 DOUBLE ( -- )  Generates a call to the next location. The following part of the definition is thus executed twice.
 
 t' ( -- t-addr )  Tick for target definitions
+
+Words for Generating the Output File
+-----------------------------------
+
+resolve ( orig -- ) Forward reference from orig to this location
+
+.trim ( a-addr u )  shorten string until it ends with '.'
+
+.suffix  ( c-addr u -- c-addr u ) e.g. "bar" -> "foo.bar"
+
+create-output-file w/o create-file throw ;
+
+out-suffix ( s -- h ) \ Create an output file h with suffix s
+   
+prepare-listing ( -- )
+ 
+dumpall Saves the memory, and also the word index. 
+
 
 QUESTIONS
 *********

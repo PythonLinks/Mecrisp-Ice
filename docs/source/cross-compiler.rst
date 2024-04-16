@@ -5,7 +5,7 @@ This page documents the Mecrisp-Ice cross compiler.
 
 ``???`` denotes the parts that I still do not understand.
 
-The cross compiler suports `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.iofolding.html`_>
+The cross compiler suports `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_
 
 The cross compiler files are in ``./common-crosscompiler``.
 The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 

@@ -56,6 +56,7 @@ Contents
 
    api
    contact
+   cross-compiler
    e4thcom
    glossary
    io

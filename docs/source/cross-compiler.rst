@@ -10,10 +10,6 @@ This page documents the Mecrisp-Ice cross compiler.  The cross compiler runs on 
 So ``???`` denotes the parts that I still do not understand.
 
 
-The cross compiler files are in ``./common-crosscompiler``.
-The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
-In that directory you will also find the ``instructionsset-*.fs`` files which define the words provided by the hardware. 
-
 Usage
 -----
 
@@ -24,24 +20,27 @@ Usage
   Where ``instructionset-*.fs`` defines the Forth words provided by the hardware.
   and ``nucleus-*.fs`` brings up a useable system.
 
-How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
+How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each hardware instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
 
+The cross compiler files are in ``./common-crosscompiler``.
+The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
+In that directory you will also find the ``instructionsset-*.fs`` files which define the words provided by the hardware. 
 
 The first complexiy is that there are three dictionaries.  What gForth calls ``word lists``.   
 
 1. The main gforth dictionary to which are added a few helpers and tools as listed below.  
 
-2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populated by the cross-compiler, and additional words are added by ``instructionset-\*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
+2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populated by the cross-compiler, and additional words are added by ``instructionset-*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
 
 3. The target dictionary for words that are downloaded to the target FPGA.  
 
-The next complexity is that words are defined with  ``:``, ``::`` and ``header-* ``.
+The next complexity is that words are defined with  ``:``, ``::`` and ``header-*``.
 Depending on the target word list, ``:`` either adds word to the base gForth word list, or to the 
 cross compiler word list.  ``::`` adds words to the cross compiler word list, and ``header-*``
 adds them from the cross-compiler word list to the target word list.  Later, when loading Mecrisp libraries and application files, 
 ``:`` adds words to the target word list.  Did you get that?  It is all quite confusing. More importantly did I get that right?  
 
-In gForth, when searching for a word,  there is a ``search-order`` for the word lists (dictionaries).  In gForth,  there is also a curent word list.  When compiling a word, it gets added to the current word list.  You can switch between current word lists with the following commands. 
+gForth supports multiple word lists.  When searching for a word,  there is a ``search-order`` for the word lists (dictionaries).   You can reorder the search list.   There is a variable called the curent word list.  When compiling a word, it gets added to the current word list.  You can also switch between current word lists with the following commands. 
 
 target   
 
@@ -111,7 +110,6 @@ Stack effects for these are "final effects", actually they are writing literal o
  
 d#     ( -- x )    Interprets the next string as a decimal. 
 
-
 h#     ( -- x )    DInterprets the next string as a hexadecimal
 
 [']    ( -- addr ) pushes the address of a word onto the stack.
@@ -128,11 +126,18 @@ literal Generates a literal instruction defined by the first bit being set to 1.
 
 tail-call-optimisation If the last word in a definition is a call, then we can just return up another level. 
 
+Adding Words to the Target
+--------------------------
+
+
+The following words add a word to the target dictionary, and
+
 header  Adds a word to the target dictionary.
 
 header-imm  Adds an immediate word to the target dictionary. 
-
-The following words add a word to the target dictionary, and mark that it is foldable if that 
+ 
+The following words add a word to the target dictionary, and
+mark that it is foldable if that 
 many arguments are all literals.  For example 2 3 + just generaes a 5, and ``+`` is called 2 foldable. 
 This reduces the required memory. 
 
@@ -148,7 +153,7 @@ header-3-foldable
 
 header-4-foldable
 
-Words for Generating he Output File
+Words for Generating the Output File
 -----------------------------------
 example
 
@@ -243,15 +248,7 @@ Generates a call to the next location. The following part of the definition is t
 
 DOUBLE ( -- )  Generates a call to the next location. The following part of the definition is thus executed twice.
 
-Wordlist juggling tools to properly switch into and out of the crosscompilation environment.
---------------------------------------------------------------------------------------------
-
-    
-
 t' ( -- t-addr )  Tick for target definitions
-
-
-
 
 QUESTIONS
 *********

@@ -39,7 +39,7 @@ so that in order to not break gForth, they are in a separate dictionary. This di
 
 The next complexity is that words are defined with  ``:``, ``::`` and ``header-*``.
 Depending on the current word list, ``:`` either adds word to the base gForth word list, or to the 
-cross compiler word list.  ``::`` adds words to the cross compiler word list, and ``header-*``
+cross compiler word list.  ``::`` always adds words to the cross compiler word list, and ``header-*``
 adds them to the target word list.  Later, when loading Mecrisp libraries and application files, 
 ``:`` again acts normally, and adds words to the target word list.  Did you get that?  
 It is all quite confusing! More importantly did I get that right?  
@@ -60,7 +60,8 @@ Words Added to the gForth Main Dictionary
 
 target-wordlist This is the list of words to be written to the FPGA's RAM. 
 
-_tbranches Stores branch addressess to simplify cross compilation.  Also saved to the build directory. 
+_tbranches Stores the addresses of Forth words, so that it is easy to look up the address of a jump. 
+This data is also saved to the build directory. 
 
 tbranches ???
 
@@ -163,78 +164,78 @@ Cross Compiler Words
 
 Hre are gForth words which are included in the cross compiled environment.  
 
-(  Comments
+:: (  Comments
 
-\  Comments
+:: \  Comments
 
-org         Write to target dictionary pointer.
+:: org         Write to target dictionary pointer.
 
-include     includes words from a Forth file. 
+:: include     includes words from a Forth file. 
 
-included     ???
+:: included     ???
 
-if       
+:: if       
 
-then     
+:: then     
 
-else     
+:: else     
 
-begin    
+:: begin    
 
-again    
+:: again    
 
-until   
+:: until   
 
-while      
+:: while      
 
-repeat   
+:: repeat   
 
-:  Half way through the ``cross-compiler-*.fs``, ``:`` is redefined.  It still defines a new word, but only for the cross-compiler. There are commands to switch between using the cross-compiler dictionary and the target dictionary. 
+:: :  Half way through the ``cross-compiler-*.fs``, ``:`` is redefined.  It still defines a new word, but only for the cross-compiler. There are commands to switch between using the cross-compiler dictionary and the target dictionary. 
 
-wordstr ( "name" -- c-addr u )   Scan ahead in the input line in order to parse the next word without removing it from the input buffer.  Just for pretty listing file printing, nothing special happens here.
+:: wordstr ( "name" -- c-addr u )   Scan ahead in the input line in order to parse the next word without removing it from the input buffer.  Just for pretty listing file printing, nothing special happens here.
 
 String Functions
 ----------------
 
->str ( c-addr u -- str ) A new u char string from c-addr.
+:: >str ( c-addr u -- str ) A new u char string from c-addr.
 
-str@  (  c-addr -- str ) Read string from c-addr.
+:: str@  (  c-addr -- str ) Read string from c-addr.
 
-str! ( str c-addr -- c-addr' ) Copy str to c-addr.
+:: str! ( str c-addr -- c-addr' ) Copy str to c-addr.
 
-+str ( str2 str1 -- str3 ) Concatenate two strings. 
+:: +str ( str2 str1 -- str3 ) Concatenate two strings. 
 
 base>number   ( caddr u base -- )
  
 
-:noname   ( -- ) ; \ This is doing nothing. Just syntactical sugar for the human in order to have a matching pair for ;
+:: :noname   ( -- ) ; \ This is doing nothing. Just syntactical sugar for the human in order to have a matching pair for ;
 
-;fallthru ( -- ) ; \ Syntactical sugar, too.
+:: ;fallthru ( -- ) ; \ Syntactical sugar, too.
 
-, ( w -- ) \ Add a word to target dictionary, this time visible from within the crosscompilation environment.
+:: , ( w -- ) \ Add a word to target dictionary, this time visible from within the crosscompilation environment.
 
-allot ( u -- ) \ Allocate space in the target dictionary by filling in zeros. Can be a negative value. 
+:: allot ( u -- ) \ Allocate space in the target dictionary by filling in zeros. Can be a negative value. 
 
-; End a word definition
+:: ; End a word definition
 
-jmp ( "name" -- )  Add jump opcode to destination label
-jz  ( "name" -- ) Add conditional opcode to destination label
+:: jmp ( "name" -- )  Add jump opcode to destination label
+:: jz  ( "name" -- ) Add conditional opcode to destination label
 
-create ( "name" -- ) Create allows the creation of named memory locations.
+:: create ( "name" -- ) Create allows the creation of named memory locations.
 They are named in host only during crosscompilation.
 For target usage, they just write a literal into the binary image.
 
-inline: ( "name" -- )  The idea of inline: is to parse the next definition, 
+:: inline: ( "name" -- )  The idea of inline: is to parse the next definition, 
 which needs to be a single opcode routine,
 and to append that opcode to the target dictionary when executed.
 Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i"
 Generates a call to the next location. The following part of the definition is thus executed twice.
 
-@i ( addr -- x ) \ Effect similar to @ on final execution ( -- ) on compilation. Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i"
+:: @i ( addr -- x ) \ Effect similar to @ on final execution ( -- ) on compilation. Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i"
 
-DOUBLE ( -- )  Generates a call to the next location. The following part of the definition is thus executed twice.
+:: DOUBLE ( -- )  Generates a call to the next location. The following part of the definition is thus executed twice.
 
-t' ( -- t-addr )  Tick for target definitions
+:: t' ( -- t-addr )  Tick for target definitions
 
 Words for Generating the Output File
 -----------------------------------

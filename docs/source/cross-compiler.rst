@@ -40,7 +40,7 @@ Words from the cross compiler dictionary can be added to the target dictionary b
 
 There is a ``search-order`` for the word lists,  there is a curent word list.  Comiled words get added to the current word list.  You can switch between word lists with the following commands. 
 
-target    only target-wordlist add-order definitions ;
+target   
 
 ]         target 
 
@@ -56,9 +56,9 @@ The next complexity is that words are defined with both ``:`` and ``::``.  How t
 
 2. Later, in the cross compiler, ``::`` defines cross compiler words.  These are only available to the cross compiler dictorionary and not to gForth. 
 
-3.  When loading ``instructions-*.fs``, ``:`` defines cross compiler words and  ``::`` also defines target words.  Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.  That way a single 16 bit instruction can control multiple parts of the CPU.   
+3.  When loading ``instructions-*.fs``, ``:`` defines cross compiler words and  ``::`` also defines cross compiler words.  Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.  That way a single 16 bit instruction can control multiple parts of the CPU.   
 
-4. When loading ``nuclues-\*.fs``, ``header\*`` words convert cross-compiled words into target dictionary words. 
+4. When loading ``nuclues-\*.fs``, ``:`` defines cross-compiler words and ``header-*`` adds wrods to the target dicitonary. 
 
 5. Later, when loading the forth libraries and application, there is only ``:``.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
 

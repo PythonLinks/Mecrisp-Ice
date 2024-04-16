@@ -7,47 +7,62 @@ This page documents the Mecrisp-Ice cross compiler.
 
 The cross compiler files are in ``./common-crosscompiler``.
 The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
-In that directory you will also find the ``instructions-*.fs`` files which define the words provided by the hardware. 
+In that directory you will also find the ``instructionsset-*.fs`` files which define the words provided by the hardware. 
 
 Usage
 -----
 
 :: 
 
-   gforth cross.fs <machine.fs> <program.fs>
+   gforth cross.fs <instructionset*.fs> <nucleus-*.fs>
 
-  Where ``machine.fs`` defines the Forth words provided by the hardware.
-  and ``program.fs`` is the program for the target device. 
+  Where ``instructionset-*.fs`` defines the Forth words provided by the hardware.
+  and ``nucleus-*.fs`` brings up a useable system.
 
-How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That  enables program compilation then you load Mecrisp libraries and your application. 
+How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 
 @Mecrisp: "I agree. And this is **after** I commented it.  The one by James Bowman is even harder to read."
 
-The first complexiy is that there are three dictionaries  
+The first complexiy is that there are three dictionaries.  What gForth calls ``word lists``.   
 
 1. The main gforth dictionary to which are added a few helpers and tools as listed below.  
 
-2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populted by the cross-compiler, and additional words are added by ``nucleus-*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
+2. The cross compiler dictionary for the definitions and labels that are available only when the crosscompiler is running, but are not downloaded to the FPGA.  This prevents bloat.  These words redefine words that are in gForth, but are only used in cross compiling, not in gForth itself. In order to not break gForth, they are in a spearate dictionary. This dictionary is initially populted by the cross-compiler, and additional words are added by ``instructionset-\*.fs``.  There are a lot more named definitions in the cross compiler dictionary than in the target FPGA's dictionary.
 
 3. The target dictionary for words that are downloaded to the target FPGA.  
 
-Words from the cross compiler dictionary can be added to the target dictionary by using the ``header-*`` words.
+Words from the cross compiler dictionary can be added to the target dictionary by using the ``header-*`` words in the
+``nucleus-*.fth`` file.
 
-The next complexity is that words are defined with both ``:`` and ``::``.  How that works depends on the 4 different stages. 
+There is a ``search-order`` for the word lists,  there is a curent word list.  Comiled words get added to the current word list.  You can switch between word lists with the following commands. 
+
+target    only target-wordlist add-order definitions ;
+
+]         target 
+
+meta     forth definitions 
+
+[        forth definitions ;
+
+
+
+The next complexity is that words are defined with both ``:`` and ``::``.  How that works depends on the 5 different stages. 
 
 1. Initially in the cross compiler ``:`` works normally and defines gforth words.
 
 2. Later, in the cross compiler, ``::`` defines cross compiler words.  These are only available to the cross compiler dictorionary and not to gForth. 
 
-3.  When loading ``instructions-*.fs``, ``:`` defines cross comipiler words and  ``::`` also defines cross compiler words.   Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.
+3.  When loading ``instructions-*.fs``, ``:`` defines cross compiler words and  ``::`` also defines target words.  Really what ``::`` does is a bitwise ``or`` of the instruction words defined with ``:``.  That way a single 16 bit instruction can control multiple parts of the CPU.   
 
-4. When loading the forth libraries and application, there is only ``:``. ``header\*`` words convert cross-compiled words into target dictionary words.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
+4. When loading ``nuclues-\*.fs``, ``header\*`` words convert cross-compiled words into target dictionary words. 
+
+5. Later, when loading the forth libraries and application, there is only ``:``.  And finally in the application forth files, once again ``:`` has its normal meaning, it refers to words which are compiled into the target FPGA's RAM.  
 
 Did you get that?  It is all quite confusing. More importantly did I get that right?  
 
-Words Added to the GForth Main Dictionary
+Words Added to the gForth Main Dictionary
 *****************************************
 
 #d  Interprets the next string as a decimal. 
@@ -103,6 +118,7 @@ Cross Compiler Words
 Hre are gForth words which are included in the cross compiled environment.  
 
 (  Comments
+
 \  Comments
 
 org         Write to target dictionary pointer.
@@ -254,15 +270,6 @@ while
 
 repeat   
 
-Wordlist juggling tools to properly switch into and out of the crosscompilation environment.\ 
-
-target    only target-wordlist add-order definitions ;
-
-]         target 
-
-meta     forth definitions 
-
-[        forth definitions ;
 
 
 QUESTIONS

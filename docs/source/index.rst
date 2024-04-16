@@ -56,8 +56,9 @@ Contents
 
    api
    contact
+   e4thcom
    glossary
    io
+   license
    test-suite
-   e4thcom
    usage

@@ -136,8 +136,8 @@ literal Generates a literal instruction defined by the first bit being set to 1.
 
 tail-call-optimisation If the last word in a definition is a call, then we can just return up another level. 
 
-: redefines compile.  This is the last gforth dictionary word defined.  From this point on, using this word, 
-  actually creates a definition in the target dictionary.  ???
+\:\: \: redefines compile.  This is the last gforth dictionary word defined.  From this point on, using this word, 
+  actually creates a definition in the target dictionary and not in the gForth dictionary.  
 
 Cross Compiler Words
 ********************
@@ -245,7 +245,7 @@ Generates a call to the next location. The following part of the definition is t
 :: t' ( -- t-addr )  Returns the address of a word defined in the target word list. 
 
 Words for Generating the Output File
------------------------------------
+-------------------------------------
 
 resolve ( orig -- ) Forward reference from orig to this location
 

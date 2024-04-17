@@ -1,7 +1,11 @@
 Cross Compiler
 ###############
 
-This page documents the Mecrisp-Ice cross compiler.  The cross compiler runs on the desktop,  takes an instruction set, and a  nucleus file and generates a hexadecimal file which verilog can load into the FPGA.  In mecrisp-ice that hex file is merged on the desktop with mecrisp libraries and your applicaiton program before being downloaded in the FPGA bitstream.  The cross compiler suports both `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_, and inlining.
+This page documents the Mecrisp-Ice cross compiler.  The cross compiler runs in gForth, on the desktop,  takes an instruction set, and a nucleus file and generates a hexadecimal file which verilog can load into the FPGA.  In mecrisp-ice that hex file is merged on the desktop with mecrisp libraries and your applicaiton program before being downloaded in the FPGA bitstream.  
+
+There is another way you could use the cross compiler. Once the nucleus is cross-compiled,  you could download it to the FPGA, load programs to the FPGA, and save them to the Flash, maybe copy them to other FPGA's bitstreams.  Yosys lets you copy a executable image into a bit stream.  
+
+The cross compiler suports both `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_, and inlining.
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 
@@ -15,14 +19,12 @@ Usage
 
 :: 
 
-   gforth cross.fs <instructionset*.fs> <nucleus-*.fs>
+  gforth cross.fs <instructionset*.fs> <nucleus-*.fs>
 
   Where ``instructionset-*.fs`` defines the Forth words provided by the hardware.
   and ``nucleus-*.fs`` brings up a useable system.
 
 How does it all work?  First you load the instructions into the cross compiler.  That defines words that the hardware supports, as well as the bits that get set for each hardware instruction.  Then you load the nucleus.  That controls which hardware words are available on the target device, and enables program compilation. Then you load Mecrisp libraries and your application. 
-
-Once the nucleus is coss-compiled, althernatively, you could download it to the FPGA, load programs to the FPGA, and save them to the Flash, maybe copy them to other FPGA's bitstreams.  Yosys lets you copy a executable image into a bit stream.  
 
 The cross compiler files are in ``./common-crosscompiler``.
 The cross compiler itself is in ``cross-*.fs`` where the ``*`` denotes which architecture it works on. 
@@ -46,17 +48,20 @@ It is all quite confusing! More importantly did I get that right?
 
 gForth supports multiple word lists.  When searching for a word,  there is a ``search-order`` for the word lists (dictionaries).   You can reorder the search order.   There is a variable called the curent word list.  When compiling a word, it gets added to the current word list.  You can also switch between current word lists with the following commands.  ??? Still not quite sure what each one does. 
 
-target   
+target   compiled words are now added to the target word list. 
 
-]         target 
+]       compiled words are now added to the target word list.  Nice syntactic sugar.   
 
-meta     forth definitions 
+:: meta      Compiled words are now added to the main gForth wordlist called ``forth``.
 
-[        forth definitions ;
+:: [        Compiled words are now added to the main gForth wordlist called ``forth``.  Nice syntactic sugar.
 
 
 Words Added to the gForth Main Dictionary
 *****************************************
+
+You can search the default list of gForth words `here <https://gforth.org/manual/Word-Index.html#Word-Index>`_.
+Here are listed the words which are then added to the gForth main dicionary.  
 
 target-wordlist This is the list of words to be written to the FPGA's RAM. 
 
@@ -131,38 +136,40 @@ literal Generates a literal instruction defined by the first bit being set to 1.
 
 tail-call-optimisation If the last word in a definition is a call, then we can just return up another level. 
 
+: redefines compile.  This is the last gforth dictionary word defined.  From this point on, using this word, 
+  actually creates a definition in the target dictionary.  ???
+
+Cross Compiler Words
+********************
+
+Hre are cross compiler words.  
+
 Adding Words to the Target
 --------------------------
 
-The following words add a word to the target dictionary, and
+The following words add a word to the target dictionary.
 
-header  Adds a word to the target dictionary.
+:: header  Adds a word to the target dictionary.
 
-header-imm  Adds an immediate word to the target dictionary. 
+:: header-imm  Adds an immediate word to the target dictionary. 
  
 The following words add a word to the target dictionary, and
 mark that it is foldable if that 
 many arguments are all literals.  For example 2 3 + just generaes a 5, and ``+`` is called 2 foldable. 
 This reduces the required memory. 
 
-header-imm-0-foldable Adds an immediate foldable word to the target dictionary. 
+:: header-0-foldable
 
-header-0-foldable
+:: header-1-foldable
 
-header-1-foldable
+:: header-2-foldable
 
-header-2-foldable
+:: header-3-foldable
 
-header-3-foldable
-
-header-4-foldable
+:: header-4-foldable
 
 
 
-Cross Compiler Words
-********************
-
-Hre are gForth words which are included in the cross compiled environment.  
 
 :: (  Comments
 
@@ -216,7 +223,7 @@ base>number   ( caddr u base -- )
 
 :: allot ( u -- ) \ Allocate space in the target dictionary by filling in zeros. Can be a negative value. 
 
-:: ; End a word definition
+:: ; End a word definition.  Checks for empty definitions, and manages tail call recursion.
 
 :: jmp ( "name" -- )  Add jump opcode to destination label
 :: jz  ( "name" -- ) Add conditional opcode to destination label
@@ -231,11 +238,11 @@ and to append that opcode to the target dictionary when executed.
 Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i"
 Generates a call to the next location. The following part of the definition is thus executed twice.
 
-:: @i ( addr -- x ) \ Effect similar to @ on final execution ( -- ) on compilation. Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i"
+:: @i ( addr -- x ) \ Effect similar to @ on final execution ( -- ) on compilation. Replaces the variable with an inline fetch using a high-call. Usage "<variable> @i" ???
 
 :: DOUBLE ( -- )  Generates a call to the next location. The following part of the definition is thus executed twice.
 
-:: t' ( -- t-addr )  Tick for target definitions
+:: t' ( -- t-addr )  Returns the address of a word defined in the target word list. 
 
 Words for Generating the Output File
 -----------------------------------

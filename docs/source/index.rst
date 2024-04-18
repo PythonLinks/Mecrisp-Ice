@@ -61,5 +61,6 @@ Contents
    glossary
    io
    license
+   links
    test-suite
    usage

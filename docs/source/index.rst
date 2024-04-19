@@ -62,5 +62,6 @@ Contents
    io
    license
    links
+   pseudo-dual-port
    test-suite
    usage

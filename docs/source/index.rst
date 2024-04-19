@@ -13,7 +13,7 @@ boards.
     "fomu",         "icebreaker",  "ulx3s"
     "fomu-ledcomm", "mch2022",     "ulx3s-usb-experimental"
     "hx1k",         "mystorm",     "hx8k" 
-    "nandland"
+    "nandland",     " `Pico-Ice <https://sourceforge.net/p/mecrisp/discussion/general/thread/350a65f919/>`_ "
  
 
 

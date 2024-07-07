@@ -281,6 +281,8 @@ Number base
 
 Memory access
 -------------- 
+**WARNING**: Mecrisp Ice is based on a 16 bit memory model.  The rest of the world is 
+based on an 8 bit or byte memory model.   Mecrisp Ice emulates byte based addressing, the lowest bit of an address is usually dropped.  So don't even think of accessing odd addresses.  The forth words which operate on characters do bit shifting to access individual charcters.  You can read the code for reading characters c@, and the more complex code for writing characters c! to see how this works.  Basically they first look at the byte address on the top of stack, and then based on whether it is odd or even, do different things when accessing the 16 bit word.  
 
 ::
 

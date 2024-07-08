@@ -3,10 +3,10 @@ Installation
 
 To use Mecrisp Ice, You have to do three things. 
 
-1) Download Mecrisp Ice from `download Page on SourceForge <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. I recommend the ``d`` version.  the newer versions lack a license file. 
+1) `Download Mecrisp Ice <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. I recommend the ``d`` version.  the newer versions lack a license file. 
 2) Download and install the open source Yosys OSS CAD suite `development tools <https://yosyshq.readthedocs.io/en/latest/install.html>`_
 3) Download and install `Free Pascal <https://www.freepascal.org/download.html>`_
-4) Download `install gforth <https://www.gnu.org/software/gforth/>`_ I am running mecrisp ice 2.6e, with gForth 0.7.3.  The mecrisp 2.6e release does not work with gForth 0.79.
+4) Download and `install gforth <https://www.gnu.org/software/gforth/>`_ I am running mecrisp ice 2.6e, with gForth 0.7.3.  The mecrisp 2.6e release does not work with the more recent gForth 0.79.
 
 Now change into the root directory and compile the Miecrisp Ice Forth Emulator. 
 
@@ -47,5 +47,4 @@ To run them, first `install Verilator <https://verilator.org/guide/latest/instal
    ./compile
    ./emulate
 
-
- 
+And finally visit the `repository for this documentation   <https://github.com/PythonLinks/Mecrisp-Ice/tree/main/docs/source>`_, and create an issue or pull request for anything that you had to do differently.  

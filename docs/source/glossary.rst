@@ -17,7 +17,7 @@ Here are the abbreviations used on this page.
 ::
 
    a address of 16 bit value
-   c address of 8 bit value (usually a character
+   c address of 8 bit value (usually a character)
    d is a double number
    n means a number
    u means unsigned number

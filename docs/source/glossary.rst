@@ -61,6 +61,7 @@ Single-Jugglers
         rot             ( x1 x2 x3 -- x2 x3 x1 )
         -rot            ( x1 x2 x3 -- x3 x1 x2 )
         ?dup            ( x -- 0 | x x ) if true dup
+        3rd             (x1 x2 x3 -- x1 x2 x3 x1)
 
         depth           ( -- +n ) Stack depth. Doubles  count twice.
 
@@ -69,11 +70,14 @@ Return Stack Operations
 
 ::
         rdepth          ( -- +n ) return stack depth. 
+
         >r              ( x -- ) (R: -- x )
+
         r>              ( -- x ) (R: x -- )
+
         r@              ( -- x ) (R: x -- x )
+
         rdrop           (  --  ) (R: x -- )
-        3rd             (x1 x2 x3 -- x1 x2 x3 x1)
 	
 Double-Jugglers:        They perform the same for double numbers.
 -----------------------------------------------------------------

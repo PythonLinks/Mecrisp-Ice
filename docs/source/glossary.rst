@@ -69,14 +69,11 @@ Return Stack Operations
 -----------------------
 
 ::
+
         rdepth          ( -- +n ) return stack depth. 
-
         >r              ( x -- ) (R: -- x )
-
         r>              ( -- x ) (R: x -- )
-
         r@              ( -- x ) (R: x -- x )
-
         rdrop           (  --  ) (R: x -- )
 	
 Double-Jugglers:        They perform the same for double numbers.

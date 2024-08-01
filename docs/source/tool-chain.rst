@@ -1,0 +1,22 @@
+Tool Chain
+#########
+
+There are numerous tools for generating these circuits.  In order to create a simulator, 
+Verilator compiles the verilog to C++.  When run, the simulator loads a memory image.   There are three tools
+for generating that memory image.   The `cross compiler <source/cross-compiler.rst>`_ 
+generates the base executable memory image.  The base image has just enough in it to compile the rest of the system, 
+but not enough to even run the full inerpreter.  You can read the base image file, it is an ascii file containing hex values. 
+
+There are three different ways to use the base image to compile 
+the rest of the Forth:
+
+1. Mecrisp Ice's pascal based ice cream machine, 
+2. the Verilator simulator, or 
+3. the base image running on an FPGA.  
+
+The part that confused me about Verilator, is that no matter when you run it, it always 
+uses the most recent version of iceimage.hex. In contrast, once you synthesize it, the memory image 
+is part of the bitstream.  Yosys includes tools for changing the memory image, but it does not automatically
+update. 
+
+Once things are working in simulation, one can use the open source Yosys tools to synthesize the circuit. 

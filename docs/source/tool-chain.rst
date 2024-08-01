@@ -16,7 +16,7 @@ the rest of the Forth:
 3. the base image running on an FPGA.  
 
 The part that confused me about Verilator, is that no matter when you run it, it always 
-uses the most recent version of iceimage.hex. In contrast, once you synthesize the, the memory image 
+uses the most recent version of iceimage.hex. In contrast, once you synthesize, the memory image 
 becomes part of the bitstream.  Yosys includes tools for changing the bitstream memory image, but it does not automatically get updated when the image changes. 
 
 Once things are working in simulation, one can use the open source Yosys tools to synthesize the circuit. 

@@ -64,4 +64,5 @@ Contents
    links
    pseudo-dual-port
    test-suite
+   tool-chain
    usage

@@ -295,7 +295,8 @@ based on an 8 bit or byte memory model.   Mecrisp Ice emulates byte based addres
         constant  name  ( u|n -- )  Makes a single constant.
         variable  name  ( u|n -- )  Makes an initialized single variable
 
-        2@              ( a-addr -- ud|d ) Fetches double number from memory
+        2@              ( a-addr -- ud|d ) Fetches two words from memory.  Often used
+                        with double numbers. 
         2!              ( ud|d a-addr -- ) Stores double number in memory
 
         @               ( a-addr -- u|n ) Fetches single number from memory

@@ -297,8 +297,8 @@ based on an 8 bit or byte memory model.   Mecrisp Ice emulates byte based addres
 
         2@              ( a-addr -- ud|d ) Fetches two words from memory.  Often used
                         with double numbers. 
-        2!              ( ud|d a-addr -- ) Stores double number in memory
-
+        2!              ( ud|d a-addr -- ) Stores two words in memory.  Often used
+                        with double numbers. 
         @               ( a-addr -- u|n ) Fetches single number from memory
         !               ( u|n a-addr -- ) Stores single number in memory
         +!              ( u|n a-addr -- ) Add to memory location

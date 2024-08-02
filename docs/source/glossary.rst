@@ -448,7 +448,8 @@ Dictionary expansion
         ,               ( u|n -- ) Appends a single 16 bit number to dictionary
         c,              ( char -- ) Appends an 8 bit byte to the dictionary
 
-        unused          ( -- u ) How many free space is still available ?
+        unused          ( -- u ) How many free space is still available ? Assumes  
+                        hex 4000 address space. 
 
         cornerstone name    Create a permanent dictionary wayback point
         new                 Core wayback point.
@@ -636,10 +637,10 @@ Misc hardware
 -------------
 
 ::       
-
-        ms              ( u -- ) Wait u milliseconds
-
-        ticks           ( -- u ) Read current ticks
+        delay: (u -- ) Wait so many clock ticks.
+        now ( -- ) set the timer to 0.
+        ticks           ( -- u ) Read current ticks.  
+        ms              ( u -- ) Wait u milliseconds.  Check the clock frequency. 
         nextirq         ( u -- ) Trigger next interrupt u cycles
                                  after the last one
 
@@ -682,12 +683,11 @@ are confident of what they do, please post an issue, so that I can update this g
 ::
 
     buffer: ( u "<name>" -- ; -- addr )
-    delay: (u -- ) Wait so many clock ticks.
+
     digit
     digit?
     link@
     nop  ( -- )  No operation.  Does nothing. 
-    now
     pause
     welcome  ( -- ) display a welcome message
     

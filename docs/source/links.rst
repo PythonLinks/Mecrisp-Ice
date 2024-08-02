@@ -15,3 +15,4 @@ Here are listed related sites.
 
 `Mecrisp Arduino <https://mecrisp.arduino-forth.com/>`_: In French a version of Mecrisp Stellaris. 
 
+`USB Interface <https://github.com/ulixxe/usb_cdc>`_: That works with mecrisp ice. 1.1K Luts. 

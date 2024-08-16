@@ -35,7 +35,7 @@ Constant folding can take many values.   For doubles, folding up to 4 is support
 ``forth`` Points to the list (Dictionary) of forth words. Each Forth word includes a pointer 
 to the previous word. 
 
-``>in`` -- Offset into the terminal input buffer
+``>in`` -- Offset into the terminal input buffer.
 
 ``init`` -- Store the xt of your entry point into it for a turnkey application that starts immediately on boot
 

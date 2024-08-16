@@ -12,7 +12,7 @@ and 16 (hexadecimal).
 
 ``constantfoldingpointer`` Is used to calculate the stack depth while the compiler performs constant folding
 
-``disasm-$`` Current position for disassembling.
+``disasm-$`` Current position for disassembling.  Disasembly is done by the Forth word ``see``.
 
 ``disasm-cont`` Continue disassembling up to this position.
  

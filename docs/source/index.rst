@@ -66,3 +66,4 @@ Contents
    test-suite
    tool-chain
    usage
+   variables

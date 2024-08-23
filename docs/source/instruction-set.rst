@@ -57,32 +57,33 @@ Mecrisp Ice
 
 Mecrisp Ice adds the following words to the J1a insruction set. 
 
-1-     ( u1|n1 -- u2|n2 ) Subtracts one, optimized         
-1+     ( u1|n1 -- u2|n2 ) Adds one, optimized    
-io@    ( c-addr -- x ) Fetches from IO register    
-@      ( a-addr -- u|n ) Fetches single number from memory
-lshift   (x1 u -- x2 ) Logical  left-shift of u bit-places
-rshift    ( x1 u -- x2 ) Logical right-shift of u bit-places
-dint    ( -- ) Disable interrupt
-eint    ( -- ) Enable ticks counter overflow interrupt
- 
-arshift   ( x1 u -- x2 ) Arithmetric right-shift of u bit-places
-rdepth       ( -- +n ) return stack depth.    
-um*low          ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication low bits
-um*high         ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication high bits
- 
 
+::
+
+  1-     ( u1|n1 -- u2|n2 ) Subtracts one, optimized         
+  1+     ( u1|n1 -- u2|n2 ) Adds one, optimized    
+  io@    ( c-addr -- x ) Fetches from IO register    
+  @      ( a-addr -- u|n ) Fetches single number from memory
+  lshift   (x1 u -- x2 ) Logical  left-shift of u bit-places
+  rshift    ( x1 u -- x2 ) Logical right-shift of u bit-places
+  dint    ( -- ) Disable interrupt
+  eint    ( -- ) Enable ticks counter overflow interrupt
+  arshift   ( x1 u -- x2 ) Arithmetric right-shift of u bit-places
+  rdepth       ( -- +n ) return stack depth.    
+  um*low          ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication low bits
+  um*high         ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication high bits
+ 
 You can read the list of elided words for Mecrisp Ice in the repository.  
 I am not sure if the two sets of elided words differ or not.           
 But only those elided words listed in the nucleus-\*.fs file are included in the cross compiled code. 
-
-
 
 Hana 1
 ------
           
 The Hana 1 has 3 additional commands for controlling the SPI bus.  
-spi@   ( -- data )   Read a 16 bit value from SPI.    
-spi!  ( data addr -- )  Write a 16 bit value to SPI.       
-cs-   ( -- )  Turn off chip select for the FLASH. 
+  spi@   ( -- data )   Read a 16 bit value from SPI.    
+  spi!  ( data addr -- )  Write a 16 bit value to SPI.       
+  cs-   ( -- )  Turn off chip select for the FLASH. 
+
+Flash chip select is turned on automatically when writing to FLASH. 
        

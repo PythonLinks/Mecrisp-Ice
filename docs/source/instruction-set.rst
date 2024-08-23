@@ -77,7 +77,7 @@ Mecrisp Ice adds the following words to the J1a insruction set.
  
 You can read the list of elided words for Mecrisp Ice in the repository.  
 I am not sure if the two sets of elided words differ or not.           
-But only those elided words listed in the nucleus-\*.fs file are included in the cross compiled code. 
+But only those elided words listed in the Mecrisp Ice nucleus-\*.fs file are included in the cross compiled code. 
 
 Hana 1
 ------

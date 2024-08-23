@@ -59,6 +59,7 @@ Contents
    cross-compiler
    e4thcom
    glossary
+   instruction-set
    io
    license
    links

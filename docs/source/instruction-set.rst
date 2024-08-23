@@ -1,7 +1,9 @@
 Instruction set
 ==============
 
-This page documents the instructions supported by the J1a, Mecrisp Ice J1a and eventually the Hana 1. 
+This page documents the instructions supported by the J1a, Mecrisp Ice J1a and the Hana 1 hardware.  
+All of the other words, documented in the `glossary <glossary.html>`_  are built using these instructions. 
+
 Here are the abbreviations used on this page. 
 
 ::

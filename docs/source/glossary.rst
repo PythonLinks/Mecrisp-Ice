@@ -137,7 +137,9 @@ Arithmetic involving double numbers
 
 ::
 
-        um*             ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication
+        um*low          ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication low bits
+        um*high         ( u1 u2 -- ud )  16bit * 16bit = 32 bit multiplication high bits
+ 
 
         um/mod          ( ud u1 -- u2 u3 ) ud / u1 = u3 remainder u2
 

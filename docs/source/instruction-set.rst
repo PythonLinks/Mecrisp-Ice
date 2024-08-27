@@ -51,7 +51,7 @@ Elided Words
 ------------
 
 For more advanced users, the J1 includes elided, which execute two or more ANSI words in one clock cycle. 
-You can read more at the bottom of `this page <https://github.com/jamesbowman/swapforth/blob/master/j1a/basewords.fs>`_
+You can read more at the bottom of `the SwapForth instruction page <https://github.com/jamesbowman/swapforth/blob/master/j1a/basewords.fs>`_
 All of the J1 elided words are available in the cross compiled nucleus. 
 
 Mecrisp Ice 

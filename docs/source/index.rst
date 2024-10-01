@@ -58,6 +58,7 @@ Contents
    contact
    cross-compiler
    e4thcom
+   flashing
    glossary
    instruction-set
    io

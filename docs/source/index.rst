@@ -44,7 +44,7 @@ If you have any questions, please post them on `our discussion board
 
 .. note::
 
-Mecrisp Ice, and its documentation are under active development.   The 16 bit dual port version and the 16 port quickstore version are both flying in space.  Lots more people are using  them here on earth. 
+Mecrisp Ice, and its documentation are under active development.
 
 Posting issues and pull requests is most welcome.  I am currently writing a master's thesis using Mecrisp Ice. By August the publication embargo should be lifted, and a lot more material will hopefully be added to this site. 
 

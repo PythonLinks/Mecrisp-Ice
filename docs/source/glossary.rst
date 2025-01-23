@@ -693,3 +693,8 @@ are confident of what they do, please post an issue, so that I can update this g
     pause
     welcome  ( -- ) display a welcome message
     
+LICENSE
+-------
+
+This page was originally written by Matthias Koch, so really his name should be on the license listed below.  He approved the Creative commons license.  If anyone knows how to edit the sphinx templates, and control files, a pull request would be most appreciated. 
+

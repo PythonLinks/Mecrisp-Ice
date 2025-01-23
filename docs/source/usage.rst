@@ -7,7 +7,7 @@ To use Mecrisp Ice, You have to do three things:
    downloading `Mecrisp Pi <https://github.com//mecrisp-pi/tree/main>`_.  
 
 #. Download and install the open source Yosys OSS CAD suite `development tools 
-   <https:/yosyshq.readthedocs.io/en/latest/install.html>`_.   
+   <https://yosyshq.net/yosys/download.html>`_.   
 
 #. Download and install `Free Pascal <https://www.freepascal.org/download.html>`_   
 

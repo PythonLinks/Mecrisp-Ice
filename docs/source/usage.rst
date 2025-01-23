@@ -1,12 +1,18 @@
 Installation
 ============
 
-To use Mecrisp Ice, You have to do three things. 
+To use Mecrisp Ice, You have to do three things:
 
-1) `Download Mecrisp Ice <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. I recommend the ``d`` version.  the newer versions lack a license file. 
-2) Download and install the open source Yosys OSS CAD suite `development tools <https://yosyshq.readthedocs.io/en/latest/install.html>`_
-3) Download and install `Free Pascal <https://www.freepascal.org/download.html>`_
-4) Download and `install gforth <https://www.gnu.org/software/gforth/>`_ I am running mecrisp ice 2.6e, with gForth 0.7.3.  The mecrisp 2.6e release does not work with the more recent gForth 0.79.
+#. `Download Mecrisp Ice <https://sourceforge.net/projects/mecrisp/files/>`_ and untar it. I recommend the    ``d`` version.  the newer versions lack a license file. If you are developing on the `Pico Ice circuit     board <https://tinyvision.ai/products/pico-ice-fpga-trainer-board>`_, then you are better off 
+   downloading `Mecrisp Pi <https://github.com//mecrisp-pi/tree/main>`_.  
+
+#. Download and install the open source Yosys OSS CAD suite `development tools 
+   <https:/yosyshq.readthedocs.io/en/latest/install.html>`.   
+
+#. Download and install `Free Pascal <https://www.freepascal.org/download.html>`_   
+
+#. Download and `install gforth <https://www.gnu.org/software/gforth/>`_ I am running mecrisp ice 2.6e, 
+   with gForth 0.7.3.  The mecrisp 2.6e release does not work with the more recent gForth 0.79.   
 
 Now change into the root directory and compile the Miecrisp Ice Forth Emulator. 
 
@@ -29,7 +35,8 @@ You can now flash the board, although the instructions to do that may well depen
 
 Simulator
 ---------
-There are also a number of verilator simulators. 
+There are also a number of verilator simulators.  Which one should you choose?  Well on Mecrisp Pi, there 
+are only two simulators, the two that are relevant for the ICE40 PSRAMs. 
 
 * verilator-16bit
 * verilator-16bit-dualport

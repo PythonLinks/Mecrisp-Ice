@@ -7,8 +7,4 @@ It is not only the right thing to do, the way that open source works is that tho
 `Mecrisp Ice
 Documentation <https://mecrisp-ice.readthedocs.io/en/latest/index.html>`__
 by Christopher Lozinski and Matthias Koch is licensed under `CC BY-SA
-4.0\ |image1|\ |image2|\ |image3| <https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1>`__
-
-.. |image1| image:: https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1
-.. |image2| image:: https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1
-.. |image3| image:: https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1
+4.0\  <https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1>`__

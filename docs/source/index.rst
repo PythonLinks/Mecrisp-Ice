@@ -44,9 +44,9 @@ If you have any questions, please post them on `our discussion board
 
 .. note::
 
-Mecrisp Ice, and its documentation are under active development.
+Posting issues and pull requests is most welcome.   
 
-Posting issues and pull requests is most welcome.  I am currently writing a master's thesis using Mecrisp Ice. By August the publication embargo should be lifted, and a lot more material will hopefully be added to this site. 
+I completed my master's thesis in September 2024.  I built a single port stack machine, based on Mecrisp Ice, running on the Pice-Ice circuit board, on a Lattice  ICE40 UP5K FPGA. 
 
 Contents
 --------

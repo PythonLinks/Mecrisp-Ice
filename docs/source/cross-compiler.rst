@@ -5,7 +5,7 @@ This page documents the Mecrisp-Ice cross compiler.  The cross compiler runs in 
 
 There is another way you could use the cross compiler. Once the nucleus is cross-compiled,  you could download it to the FPGA, load programs to the FPGA, and save them to the Flash, maybe copy them to other FPGA's bitstreams.  Yosys lets you copy a executable image into a bit stream.  
 
-The cross compiler suports both `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_, and inlining.
+The cross compiler supports both `code folding <https://mecrisp-stellaris-folkdoc.sourceforge.io/folding.html>`_, and inlining.
 
 @PythonLinks: "the cross compiler is most difficult to understand." 
 

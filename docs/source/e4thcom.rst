@@ -1,7 +1,7 @@
 e4thcom Terminal Emulator
 =========================
 
-`e4thCom <https://wiki.forth-ev.de/doku.php/en:projects:e4thcom>`_ is a terminal emulator for embedded Forth applications.
+`e4thCom <https://forth-ev.de/wiki/en:projects:e4thcom>`_ is a terminal emulator for embedded Forth applications.
 As soon as you want to upload a program, 
 and not overwhelm the embedded device, you will need it.  It uploads a line at a time, and waits for the response.The Unofficial Mecrisp Stellaris has an `excellent introduction to e4thcom 
 <https://mecrisp-stellaris-folkdoc.sourceforge.io/serial-terminals.html#e4thcom>`_. It is also 
